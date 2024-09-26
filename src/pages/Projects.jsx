@@ -101,7 +101,7 @@ const Projects = () => {
       <div className="animateSection2 flex-col text-white bg-black " style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
       <video className='mb-28 rounded-sm' width="800" autoPlay loop muted>
-        <source src="/public/NexCart.mp4" type="video/mp4" />
+        <source src="NexCart.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <h1 className='text-2xl font-bold' >E-commerce online Shoping Web-App</h1>
@@ -122,7 +122,7 @@ const Projects = () => {
       <div className="animateSection2 flex-col text-white bg-black " style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
       <video className='mb-28 rounded-md' width="800" autoPlay loop muted>
-        <source src="/public/Library.mp4" type="video/mp4" />
+        <source src="Library.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <h1 className='text-2xl font-bold' >A library management system</h1>
