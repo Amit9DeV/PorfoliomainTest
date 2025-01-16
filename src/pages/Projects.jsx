@@ -109,9 +109,9 @@ const Projects = () => {
       
       <div className='flex items-center justify-center p-5 border-b'> 
 
-        <i className='flex flex-col items-center justify-center p-5' ><FaReact /><span>React js</span></i>
-        <i className='flex flex-col items-center justify-center p-5' ><FaNodeJs /><span>Node JS</span></i>
-        <i className='flex flex-col items-center justify-center p-5' ><SiExpress /><span>Express JS</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><FaReact className='text-sky-600' /><span>React js</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><FaNodeJs className='text-green-600' /><span>Node JS</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><SiExpress className='text-yellow-600' /><span>Express JS</span></i>
         <i className='flex flex-col items-center justify-center p-5' > <img className='w-20' src="/MongoDB_Fores-Green.svg" alt="" /> <span>MongoDB</span></i>
       
        </div>
@@ -130,9 +130,9 @@ const Projects = () => {
       
       <div className='flex items-center justify-center p-5 border-b'> 
 
-        <i className='flex flex-col items-center justify-center p-5' ><FaHtml5 /><span>HTML</span></i>
-        <i className='flex flex-col items-center justify-center p-5' ><FaCss3Alt /><span>CSS</span></i>
-        <i className='flex flex-col items-center justify-center p-5' ><DiJsBadge /><span>JavaScript</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><FaHtml5 className='text-red-600' /><span>HTML</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><FaCss3Alt className='text-sky-600' /><span>CSS</span></i>
+        <i className='flex flex-col items-center justify-center p-5' ><DiJsBadge className='text-yellow-400' /><span>JavaScript</span></i>
       
        </div>
       </div>
