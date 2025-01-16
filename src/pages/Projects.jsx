@@ -62,11 +62,11 @@ const Projects = () => {
     <div className="App bg-transparent ">
       <section className='h-screen ' >
            
-          <div className="relative  isolate px-5 pt-14 lg:px-8">
+          <div className="relative  isolate px-5 pt-14 lg:px-8 ">
 
-        <div className="mx-auto max-w-2xl pt-24 ">
+        <div className="mx-auto max-w-2xl pt-24 border backdrop-blur-2xl mt-28 ">
           <div className="  mb-8 flex justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-purple-300 ring-1 ring-pink-800 hover:ring-gray-900">
+            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-purple-300 ring-1 ring-pink-800 hover:ring-gray-900 ">
               
               <a href="#" className="font-semibold text-indigo-600 p-4 ">
                 <span aria-hidden="true" className="absolute inset-0" />
@@ -75,7 +75,7 @@ const Projects = () => {
             </div>
           </div>
           <div className="text-center">
-            <h1 className="text-8xl font-bold tracking-tight text-teal-500 sm:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight text-teal-500 md:text-6xl">
               PROJECTS
             </h1>
             {/* <p className="mt-6 text-lg leading-8 text-gray-300">

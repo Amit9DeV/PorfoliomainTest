@@ -1,10 +1,10 @@
 export default function Contact(){
     return(<>
     
-    <div class="h-screen backdrop-blur-2xl  flex flex-col justify-center w-full">
+    <div class="h-screen backdrop-blur-  flex flex-col justify-center w-full">
         <div class=" pt-5 sm:max-w-xl sm:mx-auto w-full ">
 
-            <div class="text-white relative border-l border-b p-20 mt-10 md:p-5 w-full  bg- shadow-lg rounded-3xl">
+            <div class="text-white relative border-t border-b p-20 mt-10 md:p-5 w-full  bg- shadow-lg rounded-3xl backdrop-blur-2xl">
     
                 <div class="text-center pb-6">
                     <h1 class="text-3xl">Contact me</h1>
