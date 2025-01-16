@@ -33,8 +33,8 @@ export default function Home() {
             <Card className="max-w-xs bg-transparent">
               <Card.Header as="img" src="/avtar.jpg" alt="profile-picture" />
               <Card.Body className="text-center bg-transparent text-white ">
-                <Typography type="h5">Amit Ram</Typography>
-                <Typography className="my-1 text-foreground">
+                <Typography className="font-normal text-purple-600"  type="h1">Amit Ram</Typography>
+                <Typography className=" text-foreground text-green-600 text-xl " type="h">
                   Web Developer
                 </Typography>
               </Card.Body>
