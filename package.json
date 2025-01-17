@@ -16,6 +16,7 @@
     "@material-tailwind/react": "^3.0.0-beta.19",
     "@pmndrs/assets": "^1.6.0",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tooltip": "^1.1.6",
     "@react-three/drei": "^9.111.3",
     "@react-three/fiber": "^8.17.5",
     "@types/three": "^0.167.2",
