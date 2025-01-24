@@ -6,6 +6,8 @@ import { TfiEmail } from "react-icons/tfi";
 import { FaLinkedin } from "react-icons/fa";
 import { FaGithubSquare } from "react-icons/fa";
 import { FaPhoneVolume } from "react-icons/fa6";
+import AboutMotion from "../components/FrameMotion/AboutMotion";
+import AboutMotion2 from "../components/FrameMotion/AboutMotion2";
 
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -56,7 +58,7 @@ export default function About() {
   return (
     <>
       <div className=" flex w-full  justify-center">
-        <div class=" h-screen absolute flex items-center justify-center flex-col md:pt-7 ">
+        <div class=" h-screen  flex items-center justify-center flex-col md:pt-7 ">
           <div class="items-center max-w-screen-xl p-2   md:px-8  md:py-8 md:mx-auto lg:grid grid-cols-4 lg:gap-16 xl:gap-24 lg:py-24 lg:px-6 flex-col md:flex-row backdrop-blur-3xl border">
             <div class="col-span-2 mb-8">
               <p class="text-4xl cursor-pointer hover:text-purple-800 transition font-medium text-purple-500 dark:text-purple-500">
@@ -139,12 +141,43 @@ export default function About() {
                 </p>
               </div>
             </div>
+     
           </div>
         </div>
-{/*         
-<div className="animateSection2" style={{ height: '100vh', background: '#6f61ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <h2>Another animated section</h2>
-      </div> */}
+      </div>
+
+      <div
+        className="animateSection2 border backdrop-blur-lg"
+        style={{
+          height: "100vh",
+          display: "flex",
+          // alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div className="w-full overflow-hidden">
+        <div className="flex justify-between w-full">
+        <AboutMotion className="max-w-[100px]" ></AboutMotion>
+        <AboutMotion className="max-w-[100px]"></AboutMotion>
+        </div>
+        <div className="flex justify-between w-full">
+        <AboutMotion className="max-w-[100px]" ></AboutMotion>
+        <AboutMotion className="max-w-[100px]"></AboutMotion>
+        </div>
+        <div className="flex justify-between w-full">
+        <AboutMotion className="max-w-[100px]" ></AboutMotion>
+        <AboutMotion className="max-w-[100px]"></AboutMotion>
+        </div>
+        <div className="flex justify-between w-full">
+        <AboutMotion className="max-w-[100px]" ></AboutMotion>
+        <AboutMotion className="max-w-[100px]"></AboutMotion>
+        </div>
+        </div>
+        <div className="absolute">
+
+          <h1 className="text-white text-6xl" >Skills</h1>
+        </div>
+        <AboutMotion2/>
       </div>
     </>
   );

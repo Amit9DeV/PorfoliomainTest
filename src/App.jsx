@@ -5,7 +5,7 @@ import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import { TransitionProvider } from "./transitions/ContentTransition";
 import TransitionComponent from "./transitions/Transiton";
-
+import AboutMotion2 from "./components/FrameMotion/AboutMotion2";
 import { useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { WaveMaterial } from "./transitions/WaveMaterial";
