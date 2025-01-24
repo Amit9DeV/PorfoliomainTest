@@ -141,7 +141,7 @@ export default function About() {
             </div>
           </div>
         </div>
-        {/* 
+{/*         
 <div className="animateSection2" style={{ height: '100vh', background: '#6f61ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <h2>Another animated section</h2>
       </div> */}
