@@ -90,7 +90,7 @@ function App() {
             </Routes>
           </TransitionProvider>
         </motion.ul>
-        <div className="text-white hidden md:flex ">
+        <div className="text-white ">
           <Footer />
         </div>
       </div>

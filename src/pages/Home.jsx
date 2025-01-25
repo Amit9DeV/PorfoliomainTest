@@ -9,16 +9,11 @@ import { X, Facebook, Instagram } from "iconoir-react";
 export default function Home() {
   return (
     <>
-    <div className="flex bg-black justify-center bg-transparent">
-      <div class="absolute border flex  md:h-screen md:w-1/2 bg-black backdrop-blur-2xl">
-        <div class=" flex items-center justify-center absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
-        <div class="absolute left-[180px] right-0 top-[-10%] h-[50vh] w-[50%] rounded-full bg-[radial-gradient(circle_400px_at_50%_300px,#fbfbfb36,#000)]"></div>
-      </div>
-      </div>
+
       <div className=" bg-transparent relative flex items-center justify-center h-screen">
         <div className="flex flex-col items-center justify-center">
           <div className=" ">
-            <div className=" m-4 md:mt-32 flex items-center justify-center rounded-full px-3 py-1 text-sm  text-purple-300 ring-1 ring-pink-800 hover:text-green-700 ">
+            <div className=" m-4 md:mt-20 flex items-center justify-center rounded-full px-3 py-1 text-sm  text-purple-300 ring-1 ring-pink-800 hover:text-green-700 ">
               MERN DEVELOPER
               <NavLink
                 to="/Projects"
