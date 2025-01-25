@@ -8,6 +8,13 @@ import { FaGithubSquare } from "react-icons/fa";
 import { FaPhoneVolume } from "react-icons/fa6";
 import AboutMotion from "../components/FrameMotion/AboutMotion";
 import AboutMotion2 from "../components/FrameMotion/AboutMotion2";
+import { FaReact } from "react-icons/fa";
+import { TbBrandRedux } from "react-icons/tb";
+import { SiJavascript } from "react-icons/si";
+import { RiTailwindCssFill } from "react-icons/ri";
+import { LiaNode } from "react-icons/lia";
+import { SiExpress } from "react-icons/si";
+import { SiMongodb } from "react-icons/si";
 
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -141,7 +148,6 @@ export default function About() {
                 </p>
               </div>
             </div>
-     
           </div>
         </div>
       </div>
@@ -156,28 +162,55 @@ export default function About() {
         }}
       >
         <div className="w-full overflow-hidden">
-        <div className="flex justify-between w-full">
-        <AboutMotion className="max-w-[100px]" ></AboutMotion>
-        <AboutMotion className="max-w-[100px]"></AboutMotion>
-        </div>
-        <div className="flex justify-between w-full">
-        <AboutMotion className="max-w-[100px]" ></AboutMotion>
-        <AboutMotion className="max-w-[100px]"></AboutMotion>
-        </div>
-        <div className="flex justify-between w-full">
-        <AboutMotion className="max-w-[100px]" ></AboutMotion>
-        <AboutMotion className="max-w-[100px]"></AboutMotion>
-        </div>
-        <div className="flex justify-between w-full">
-        <AboutMotion className="max-w-[100px]" ></AboutMotion>
-        <AboutMotion className="max-w-[100px]"></AboutMotion>
-        </div>
+          <div className="flex justify-between w-full">
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+          </div>
+          <div className="flex justify-between w-full">
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+          </div>
+          <div className="flex justify-between w-full">
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+          </div>
+          <div className="flex justify-between w-full">
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+            <AboutMotion className="max-w-[100px]"></AboutMotion>
+          </div>
         </div>
         <div className="absolute">
-
-          <h1 className="text-white text-6xl" >Skills</h1>
+          <h1 className="text-green-600 font-bold p-4 text-6xl">Skills</h1>
         </div>
-        <AboutMotion2/>
+        <div className=" absolute left-72 top-60 flex flex-col gap-24 border p-5 px-10">
+          <i className="text-sky-100 text-2xl ">
+            <FaReact className="text-sky-600 text-6xl" />
+            React js
+          </i>
+          <i className="text-sky-100 text-2xl">
+            <TbBrandRedux className="text-sky-600 text-6xl" /> Redux
+          </i>
+        </div>
+        <div className=" absolute right-72 top-60 flex flex-col gap-24 border p-5  ">
+          <i className="text-sky-100 text-2xl">
+            <SiJavascript className="text-yellow-600 text-5xl" /> JavaScript
+          </i>
+          <i className="text-sky-100 text-2xl">
+            <RiTailwindCssFill className="text-sky-600 text-6xl" /> Tailwind CSS
+          </i>
+        </div>
+        <div className=" absolute  bottom-0 flex gap-24 border p-5 ">
+          <i className="text-sky-100 text-2xl">
+            <LiaNode className="text-green-600 text-6xl" /> Node JS
+          </i>
+          <i className="text-sky-100 text-2xl">
+            <SiExpress className="text-yellow-600 text-6xl" />  Express JS
+          </i>
+          <i className="text-sky-100 text-2xl">
+            <SiMongodb className="text-green-600 text-6xl" />  MongoDB
+          </i>
+        </div>
+        <AboutMotion2 />
       </div>
     </>
   );

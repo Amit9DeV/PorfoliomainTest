@@ -38,7 +38,6 @@ function ShaderPlane() {
 function App() {
   return (
     <>
-
       <div className=" h-screen w-full  relative ">
         <div className="absolute  w-full h-screen ">
           <Canvas>
@@ -46,54 +45,54 @@ function App() {
           </Canvas>
         </div>
         <motion.ul
-       animate={{ rotate: 360 }} // Rotate 360 degrees
-       transition={{
-        duration: 2, // Animation duration (seconds)
-        ease: "easeInOut", // Smooth easing
-      }}
-      >
-       
-        <NavBar />
+          animate={{ rotate: 360 }} // Rotate 360 degrees
+          transition={{
+            duration: 2, // Animation duration (seconds)
+            ease: "easeInOut", // Smooth easing
+          }}
+        >
+          <NavBar />
 
-        <TransitionProvider>
-          <Routes>
-            <Route
-              path=""
-              element={
-                <TransitionComponent>
-                  <Home />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path="About"
-              element={
-                <TransitionComponent>
-                  <About />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path="Projects"
-              element={
-                <TransitionComponent>
-                  <Projects />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path="Contact"
-              element={
-                <TransitionComponent>
-                  <Contact />
-                </TransitionComponent>
-              }
-            />
-          </Routes>
-        </TransitionProvider>
-      </motion.ul>
-          <div className="text-white hidden md:flex "><Footer/></div>
-       
+          <TransitionProvider>
+            <Routes>
+              <Route
+                path=""
+                element={
+                  <TransitionComponent>
+                    <Home />
+                  </TransitionComponent>
+                }
+              />
+              <Route
+                path="About"
+                element={
+                  <TransitionComponent>
+                    <About />
+                  </TransitionComponent>
+                }
+              />
+              <Route
+                path="Projects"
+                element={
+                  <TransitionComponent>
+                    <Projects />
+                  </TransitionComponent>
+                }
+              />
+              <Route
+                path="Contact"
+                element={
+                  <TransitionComponent>
+                    <Contact />
+                  </TransitionComponent>
+                }
+              />
+            </Routes>
+          </TransitionProvider>
+        </motion.ul>
+        <div className="text-white hidden md:flex ">
+          <Footer />
+        </div>
       </div>
     </>
   );
