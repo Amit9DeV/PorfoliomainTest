@@ -18,7 +18,7 @@ const navigation = [
   { name: "Contact", href: "/Contact" },
 ];
 
-const [active,setActive] = useState(true);
+
 
 export default function NavBar() {
   return (
@@ -30,16 +30,16 @@ export default function NavBar() {
           <DrawerTrigger className="backdrop-blur-3xl text-red-500 border p-2 font-bold mt-5 ">
             Do Not Click
           </DrawerTrigger>
-          <DrawerContent>
-          { active && 
+          <DrawerContent className="mx-auto p-24 backdrop-blur-xl">
+          {  
             <nav
               aria-label="Global"
-              className="flex items-center justify-between p-3 px-9 md:p-7 mt-1 border backdrop-blur-2xl  "
+              className="flex items-center justify-between py-3 px-4 mt-1 border backdrop-blur-2xl mx-auto "
             >
               <div className="flex gap-3 items-center justify-center md:gap-x-12">
                 {navigation.map((item) => (
                   <NavLink
-                    onClick={()=>setActive(!active)}
+                   
                     key={item.name}
                     to={item.href}
                     className="text-lg font-semibold leading-6 border-b-2 hover:border-b-pink-600 text-white hover:text-yellow-600 "
