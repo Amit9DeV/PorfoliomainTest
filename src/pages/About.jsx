@@ -15,6 +15,7 @@ import { RiTailwindCssFill } from "react-icons/ri";
 import { LiaNode } from "react-icons/lia";
 import { SiExpress } from "react-icons/si";
 import { SiMongodb } from "react-icons/si";
+import { motion } from "framer-motion";
 
 // Register ScrollTrigger with GSAP
 gsap.registerPlugin(ScrollTrigger);
@@ -49,6 +50,38 @@ const useAdvancedScrollAnimation = ({
   }, [triggerSelector, animationConfig, scrollTriggerConfig]);
 };
 
+const skills = [
+  { name: "React", level: 90 },
+  { name: "Node.js", level: 85 },
+  { name: "MongoDB", level: 80 },
+  { name: "Express", level: 85 },
+  { name: "JavaScript", level: 90 },
+  { name: "TypeScript", level: 75 },
+  { name: "Tailwind CSS", level: 85 },
+  { name: "Three.js", level: 70 },
+];
+
+const experiences = [
+  {
+    year: "2023 - Present",
+    title: "Senior MERN Stack Developer",
+    company: "Tech Company Name",
+    description: "Leading development of full-stack web applications using MERN stack.",
+  },
+  {
+    year: "2021 - 2023",
+    title: "Full Stack Developer",
+    company: "Previous Company Name",
+    description: "Developed and maintained multiple web applications using modern technologies.",
+  },
+  {
+    year: "2020 - 2021",
+    title: "Junior Developer",
+    company: "First Company Name",
+    description: "Started my journey in web development, focusing on front-end technologies.",
+  },
+];
+
 export default function About() {
   useAdvancedScrollAnimation({
     triggerSelector: ".animateSection2",
@@ -63,155 +96,122 @@ export default function About() {
   });
 
   return (
-    <>
-      <div className=" flex w-full  justify-center">
-        <div class=" h-screen  flex items-center justify-center flex-col md:pt-7 ">
-          <div class="items-center max-w-screen-xl p-2   md:px-8  md:py-8 md:mx-auto lg:grid grid-cols-4 lg:gap-16 xl:gap-24 lg:py-24 lg:px-6 flex-col md:flex-row backdrop-blur-3xl border">
-            <div class="col-span-2 mb-8">
-              <p class="text-4xl cursor-pointer hover:text-purple-800 transition font-medium text-purple-500 dark:text-purple-500">
-                Amit Ram
+    <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-16">
+        {/* About Me Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="space-y-8"
+        >
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            About Me
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4"
+            >
+              <p className="text-gray-300 text-lg leading-relaxed">
+                I'm a passionate MERN stack developer with 3+ years of experience in building
+                modern web applications. My journey in web development started with a
+                curiosity about how things work on the internet, and it has evolved into a
+                full-fledged career in creating beautiful and functional web experiences.
               </p>
-              <h2 class="mt-3 mb-4 text-3xl font-extrabold tracking-tight  md:text-3xl text-green-600 ">
-                MERN Stack Developer
-              </h2>
-              <p class="font-light text-gray-300 sm:text-xl dark:text-gray-400">
-                Passionate and detail-oriented MERN Stack Developer with a
-                strong foundation in MongoDB, Express.js, React, and Node.js. I
-                thrive in creating dynamic and scalable web applications,
-                blending cutting-edge technology with innovative solutions. My
-                experience spans full-stack development, where I’ve successfully
-                built and maintained both frontend and backend systems, ensuring
-                seamless user experiences and robust functionality.
+              <p className="text-gray-300 text-lg leading-relaxed">
+                I specialize in building full-stack applications using MongoDB, Express.js,
+                React, and Node.js. I'm also experienced in modern front-end technologies
+                and best practices, always striving to create responsive and user-friendly
+                interfaces.
               </p>
-              <div class="pt-6 mt-6 space-y-4 border-t border-gray-200 dark:border-gray-700">
-                <div>
-                  <a
-                    href="/Amit Ram.pdf"
-                    class="inline-flex items-center text-4xl font-medium text-green-600 hover:text-purple-800 dark:text-purple-500 dark:hover:text-purple-700"
-                  >
-                    Resume
-                    <svg
-                      class="w-10 h-5 ml-1  "
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </a>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+              className="relative"
+            >
+              <div className="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden">
+                <img
+                  src="/coding-setup.jpg"
+                  alt="My Workspace"
+                  className="object-cover"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Skills Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-8"
+        >
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            Skills & Technologies
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {skills.map((skill, index) => (
+              <motion.div
+                key={skill.name}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="bg-white/5 backdrop-blur-xl rounded-lg p-4 space-y-2"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-white font-medium">{skill.name}</span>
+                  <span className="text-gray-400">{skill.level}%</span>
                 </div>
-              </div>
-            </div>
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${skill.level}%` }}
+                    transition={{ duration: 1, delay: 0.2 * index }}
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
 
-            <div class="col-span-2 space-y-8 grid grid-cols-2 md:gap-12 md:space-y-0 ">
-              <div>
-                <TfiEmail className="text-4xl text-purple-700 " />
-                <h3 class="mb-2 text-2xl font-bold dark:text-white">Email</h3>
-                <p class="font-light text-green-600 text-xl dark:text-gray-400">
-                  cloud15333@gmail.com
-                </p>
-              </div>
-              <div className="pl-9 md:pl-0">
-                <a href="https://www.linkedin.com/in/amit-ram-b8384a24b/">
-                  <FaLinkedin className="text-4xl text-purple-700 " />
-                  <h3 class="mb-2 text-2xl font-bold dark:text-white">
-                    linkedin
-                  </h3>
-                  <p class="font-light text-gray-500 dark:text-gray-400">
-                    Amit Ram
-                  </p>
-                </a>
-              </div>
-              <div>
-                <a href="https://github.com/Amit9DeV">
-                  <FaGithubSquare className="text-4xl text-purple-700" />
-                  <h3 class="mb-2 text-2xl font-bold dark:text-white">
-                    GitHub
-                  </h3>
-                  <p class="font-light text-gray-500 dark:text-gray-400">
-                    {" "}
-                    Amit9Dev
-                  </p>
-                </a>
-              </div>
-              <div className="pl-9 md:pl-0">
-                <FaPhoneVolume className="text-4xl text-purple-700" />
-                <h3 class="mb-2 text-2xl font-bold dark:text-white">
-                  contact number
-                </h3>
-                <p class="font-light text-green-600 dark:text-gray-400">
-                  +919334135467
-                </p>
-              </div>
-            </div>
+        {/* Experience Timeline */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="space-y-8"
+        >
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            Experience
+          </h2>
+          <div className="space-y-8">
+            {experiences.map((exp, index) => (
+              <motion.div
+                key={exp.year}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="relative pl-8 pb-8 border-l-2 border-purple-500/30 last:pb-0"
+              >
+                <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
+                <div className="space-y-2">
+                  <span className="text-sm text-purple-400">{exp.year}</span>
+                  <h3 className="text-xl font-semibold text-white">{exp.title}</h3>
+                  <p className="text-gray-400">{exp.company}</p>
+                  <p className="text-gray-300">{exp.description}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </div>
+        </motion.section>
       </div>
-
-      <div
-        className="animateSection2 border backdrop-blur-lg"
-        style={{
-          height: "100vh",
-          display: "flex",
-          // alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <div className="w-full overflow-hidden">
-          <div className="flex justify-between w-full">
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-          </div>
-          <div className="flex justify-between w-full">
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-          </div>
-          <div className="flex justify-between w-full">
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-          </div>
-          <div className="flex justify-between w-full">
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-            <AboutMotion className="max-w-[100px]"></AboutMotion>
-          </div>
-        </div>
-        <div className="absolute">
-          <h1 className="text-green-600 font-bold p-4 text-6xl">Skills</h1>
-        </div>
-        <div className=" absolute left-72 top-60 flex flex-col gap-24 border p-5 px-10">
-          <i className="text-sky-100 text-2xl ">
-            <FaReact className="text-sky-600 text-6xl" />
-            React js
-          </i>
-          <i className="text-sky-100 text-2xl">
-            <TbBrandRedux className="text-sky-600 text-6xl" /> Redux
-          </i>
-        </div>
-        <div className=" absolute right-72 top-60 flex flex-col gap-24 border p-5  ">
-          <i className="text-sky-100 text-2xl">
-            <SiJavascript className="text-yellow-600 text-5xl" /> JavaScript
-          </i>
-          <i className="text-sky-100 text-2xl">
-            <RiTailwindCssFill className="text-sky-600 text-6xl" /> Tailwind CSS
-          </i>
-        </div>
-        <div className=" absolute  bottom-0 flex gap-24 border p-5 ">
-          <i className="text-sky-100 text-2xl">
-            <LiaNode className="text-green-600 text-6xl" /> Node JS
-          </i>
-          <i className="text-sky-100 text-2xl">
-            <SiExpress className="text-yellow-600 text-6xl" />  Express JS
-          </i>
-          <i className="text-sky-100 text-2xl">
-            <SiMongodb className="text-green-600 text-6xl" />  MongoDB
-          </i>
-        </div>
-        <AboutMotion2 />
-      </div>
-    </>
+    </div>
   );
 }
