@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { motion, AnimatePresence } from "framer-motion";
+import { Terminal, Code } from "iconoir-react";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -14,9 +10,31 @@ const navigation = [
   { name: "Contact", href: "/Contact" },
 ];
 
+// Terminal header component for desktop navigation
+const TerminalTab = ({ children, isActive }) => (
+  <div className="relative group">
+    <div className={`absolute top-0 inset-x-0 h-0.5 ${isActive ? "bg-blue-500" : "bg-transparent group-hover:bg-blue-500/40"} transition-colors duration-300`}></div>
+    <div className="flex items-center space-x-1.5 px-2 py-1">
+      {isActive && (
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+        </span>
+      )}
+      {children}
+    </div>
+  </div>
+);
+
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +43,18 @@ export default function NavBar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <motion.header
@@ -177,62 +207,122 @@ export default function NavBar() {
             </motion.div>
           </motion.div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={({ isActive }) =>
-                  `relative px-3 py-2 text-sm font-medium transition-all duration-300 ${
-                    isActive
-                      ? "text-white"
-                      : "text-gray-400 hover:text-white"
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <div className="relative group">
-                    <span className="relative z-10">{item.name}</span>
-                    {isActive ? (
-                      <motion.div
-                        layoutId="navunderline"
-                        className="absolute left-0 right-0 h-0.5 -bottom-1 bg-gradient-to-r from-blue-600 to-blue-400"
-                      />
-                    ) : (
-                      <div className="absolute left-0 right-0 h-0.5 -bottom-1 bg-gradient-to-r from-blue-600 to-blue-400 opacity-0 transform scale-x-0 group-hover:opacity-100 group-hover:scale-x-100 transition-all duration-300" />
+          {/* Desktop Navigation - Terminal Style */}
+          <div className="hidden md:flex items-center">
+            {/* Terminal Header Bar */}
+            <div className="bg-black/40 backdrop-blur-md rounded-lg border border-blue-500/30 flex items-center overflow-hidden">
+              <div className="flex space-x-1.5 px-3 py-2.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+              </div>
+              
+              <div className="flex items-center">
+                {navigation.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.href}
+                    className={({ isActive }) =>
+                      `relative px-4 py-2.5 transition-all duration-300 border-r border-blue-900/30 last:border-r-0 ${
+                        isActive
+                          ? "bg-blue-900/30 text-white"
+                          : "text-gray-400 hover:text-white hover:bg-blue-900/10"
+                      }`
+                    }
+                  >
+                    {({ isActive }) => (
+                      <TerminalTab isActive={isActive}>
+                        <div className="flex items-center space-x-1.5">
+                          <Code className={`w-4 h-4 ${isActive ? "text-blue-400" : "text-gray-500"}`} />
+                          <span className="font-mono text-sm">{item.name.toLowerCase()}.sh</span>
+                        </div>
+                      </TerminalTab>
                     )}
-                  </div>
-                )}
-              </NavLink>
-            ))}
+                  </NavLink>
+                ))}
+              </div>
+              
+              <div className="px-3 py-2.5 font-mono text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-blue-400">
+                  <span className="animate-pulse">●</span>
+                  <span>visitor@portfolio</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Menu Button - Terminal Style */}
           <div className="md:hidden">
-            <Drawer>
-              <DrawerTrigger className="relative p-2 rounded-lg hover:bg-blue-900/20 transition-all duration-300 group">
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-900/0 to-blue-600/0 group-hover:from-blue-900/10 group-hover:to-blue-600/10 transition-all duration-300" />
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="relative p-2 rounded-lg border border-blue-500/30 bg-black/30 backdrop-blur-sm hover:bg-blue-900/20 transition-all duration-300 group"
+              aria-label="Toggle menu"
+            >
+              <div className="font-mono text-xs flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-blue-400" />
+                <span className="text-gray-300">menu</span>
+              </div>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Mobile Navigation Menu - Terminal Style */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-md z-40"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            
+            {/* Side Menu */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed top-0 right-0 bottom-0 w-[280px] z-50 bg-black/95 border-l border-blue-900/30"
+            >
+              {/* Terminal Header */}
+              <div className="px-4 py-3 border-b border-blue-900/30 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  <span className="text-white font-mono text-sm">navigation.sh</span>
+                </div>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-gray-400 hover:text-white"
                 >
-                  <path d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-              </DrawerTrigger>
-              <DrawerContent className="h-[90vh] backdrop-blur-2xl bg-black/95 border-t border-blue-900/30">
-                <div className="flex flex-col items-center justify-center h-full space-y-8">
-                  {navigation.map((item) => (
+                  <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Menu Content */}
+              <div className="p-5 h-full">
+                <div className="font-mono text-xs text-blue-400 mb-4">
+                  $ cat navigation.sh | bash
+                </div>
+                
+                <div className="space-y-1">
+                  {navigation.map((item, index) => (
                     <NavLink
                       key={item.name}
                       to={item.href}
                       className={({ isActive }) =>
-                        `relative text-xl font-medium transition-all duration-300 ${
+                        `block font-mono transition-all duration-300 ${
                           isActive
                             ? "text-white"
                             : "text-gray-400 hover:text-white"
@@ -240,25 +330,40 @@ export default function NavBar() {
                       }
                     >
                       {({ isActive }) => (
-                        <div className="relative group px-6 py-2">
-                          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-900/0 to-blue-600/0 group-hover:from-blue-900/10 group-hover:to-blue-600/10 transition-all duration-300" />
-                          <span className="relative z-10">{item.name}</span>
+                        <motion.div 
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="relative p-3 rounded-lg group hover:bg-blue-900/20"
+                        >
+                          <div className="flex items-center">
+                            <span className="text-blue-400 mr-2">$</span>
+                            <span>cd ~/{item.name.toLowerCase()}</span>
+                          </div>
                           {isActive && (
-                            <motion.div
-                              layoutId="mobilenavunderline"
-                              className="absolute left-0 right-0 h-0.5 -bottom-1 bg-gradient-to-r from-blue-600 to-blue-400"
-                            />
+                            <div className="mt-1 pl-5 text-xs text-green-400">
+                              # Current location
+                              <div className="w-2 h-4 bg-blue-500 inline-block ml-1 animate-pulse align-middle" />
+                            </div>
                           )}
-                        </div>
+                        </motion.div>
                       )}
                     </NavLink>
                   ))}
                 </div>
-              </DrawerContent>
-            </Drawer>
-          </div>
-        </nav>
-      </div>
+                
+                {/* Terminal Footer */}
+                <div className="absolute bottom-4 left-5 right-5 font-mono text-xs text-gray-500">
+                  <div className="flex justify-between items-center">
+                    <div className="text-green-400">visitor@portfolio:~$</div>
+                    <div className="text-blue-400 animate-pulse">● online</div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

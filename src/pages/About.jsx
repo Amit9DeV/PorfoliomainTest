@@ -16,9 +16,22 @@ import { LiaNode } from "react-icons/lia";
 import { SiExpress } from "react-icons/si";
 import { SiMongodb } from "react-icons/si";
 import { motion } from "framer-motion";
+import { Terminal, ArrowRight, Code, Download, ArrowDown } from "iconoir-react";
 
-// Register ScrollTrigger with GSAP
-gsap.registerPlugin(ScrollTrigger);
+// Terminal header component
+const TerminalHeader = ({ title }) => (
+  <div className="rounded-t-lg bg-blue-900/30 border border-blue-500/20 overflow-hidden">
+    <div className="px-4 py-2 flex items-center">
+      <div className="flex space-x-2 mr-4">
+        <div className="w-3 h-3 rounded-full bg-red-500" />
+        <div className="w-3 h-3 rounded-full bg-yellow-500" />
+        <div className="w-3 h-3 rounded-full bg-green-500" />
+      </div>
+      <div className="text-white font-mono text-sm flex-1 text-center">{title}</div>
+      <div className="text-gray-400 font-mono text-xs">visitor@amit-portfolio</div>
+    </div>
+  </div>
+);
 
 // Custom Hook for Advanced Scroll Animation
 const useAdvancedScrollAnimation = ({
@@ -105,9 +118,13 @@ export default function About() {
           transition={{ duration: 0.5 }}
           className="space-y-8"
         >
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            About Me
-          </h2>
+          <div className="mb-6">
+            <TerminalHeader title="~/personal-info.md" />
+            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
+              $ cat personal-info.md | more
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -115,18 +132,24 @@ export default function About() {
               transition={{ delay: 0.2 }}
               className="space-y-4"
             >
-              <p className="text-gray-300 text-lg leading-relaxed">
-                I'm a passionate MERN stack developer with 3+ years of experience in building
-                modern web applications. My journey in web development started with a
-                curiosity about how things work on the internet, and it has evolved into a
-                full-fledged career in creating beautiful and functional web experiences.
-              </p>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                I specialize in building full-stack applications using MongoDB, Express.js,
-                React, and Node.js. I'm also experienced in modern front-end technologies
-                and best practices, always striving to create responsive and user-friendly
-                interfaces.
-              </p>
+              <h2 className="text-2xl font-bold font-mono text-white border-l-2 border-blue-500 pl-3">
+                <span className="text-blue-400">function</span> <span className="text-green-400">aboutMe</span><span className="text-yellow-500">()</span> {"{"}
+              </h2>
+              <div className="pl-6 space-y-4 border-l border-dashed border-blue-500/30">
+                <p className="text-gray-300 text-lg leading-relaxed">
+                  I'm a passionate MERN stack developer with 3+ years of experience in building
+                  modern web applications. My journey in web development started with a
+                  curiosity about how things work on the internet, and it has evolved into a
+                  full-fledged career in creating beautiful and functional web experiences.
+                </p>
+                <p className="text-gray-300 text-lg leading-relaxed">
+                  I specialize in building full-stack applications using MongoDB, Express.js,
+                  React, and Node.js. I'm also experienced in modern front-end technologies
+                  and best practices, always striving to create responsive and user-friendly
+                  interfaces.
+                </p>
+              </div>
+              <div className="text-white font-mono">{"}"}</div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -134,12 +157,16 @@ export default function About() {
               transition={{ delay: 0.3 }}
               className="relative"
             >
-              <div className="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden">
+              <TerminalHeader title="~/workspace.jpg" />
+              <div className="aspect-w-16 aspect-h-9 rounded-b-lg overflow-hidden border border-blue-500/20 border-t-0">
                 <img
-                  src="/coding-setup.jpg"
+                  src="/avtar.jpg"
                   alt="My Workspace"
                   className="object-cover"
                 />
+                <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/70 backdrop-blur-sm font-mono text-xs text-green-400">
+                  $ image --view workspace.jpg --resolution 1920x1080
+                </div>
               </div>
             </motion.div>
           </div>
@@ -152,9 +179,13 @@ export default function About() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="space-y-8"
         >
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Skills & Technologies
-          </h2>
+          <div className="mb-6">
+            <TerminalHeader title="~/skills.json" />
+            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
+              $ skills --list --sort level:desc | render
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {skills.map((skill, index) => (
               <motion.div
@@ -162,19 +193,22 @@ export default function About() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="bg-white/5 backdrop-blur-xl rounded-lg p-4 space-y-2"
+                className="bg-black/30 backdrop-blur-xl rounded-lg p-4 space-y-2 border border-blue-500/20"
               >
                 <div className="flex justify-between items-center">
-                  <span className="text-white font-medium">{skill.name}</span>
-                  <span className="text-gray-400">{skill.level}%</span>
+                  <span className="text-white font-medium font-mono">{skill.name}</span>
+                  <span className="text-blue-400 font-mono text-sm">{skill.level}%</span>
                 </div>
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-2 bg-blue-900/20 rounded-full overflow-hidden border border-blue-500/10">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${skill.level}%` }}
                     transition={{ duration: 1, delay: 0.2 * index }}
-                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-700"
                   />
+                </div>
+                <div className="text-xs text-gray-400 font-mono">
+                  [<span className="text-yellow-500">{skill.level >= 80 ? 'Expert' : skill.level >= 70 ? 'Advanced' : 'Intermediate'}</span>]
                 </div>
               </motion.div>
             ))}
@@ -188,9 +222,13 @@ export default function About() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="space-y-8"
         >
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Experience
-          </h2>
+          <div className="mb-6">
+            <TerminalHeader title="~/experience.log" />
+            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
+              $ cat experience.log | tail -n 10 | less
+            </div>
+          </div>
+          
           <div className="space-y-8">
             {experiences.map((exp, index) => (
               <motion.div
@@ -198,17 +236,26 @@ export default function About() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="relative pl-8 pb-8 border-l-2 border-purple-500/30 last:pb-0"
+                className="relative pl-8 pb-8 border-l-2 border-blue-500/30 last:pb-0"
               >
-                <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
+                <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-blue-500" />
                 <div className="space-y-2">
-                  <span className="text-sm text-purple-400">{exp.year}</span>
-                  <h3 className="text-xl font-semibold text-white">{exp.title}</h3>
-                  <p className="text-gray-400">{exp.company}</p>
-                  <p className="text-gray-300">{exp.description}</p>
+                  <span className="text-sm text-blue-400 font-mono">[{exp.year}]</span>
+                  <h3 className="text-xl font-semibold text-white font-mono">{exp.title}</h3>
+                  <p className="text-gray-400 font-mono text-sm">@{exp.company}</p>
+                  <p className="text-gray-300 border-l-2 border-blue-500/20 pl-3">{exp.description}</p>
                 </div>
               </motion.div>
             ))}
+          </div>
+          
+          <div className="flex justify-center pt-8">
+            <div className="font-mono text-xs flex items-center gap-2">
+              <span className="text-green-400">visitor@portfolio:</span>
+              <span className="text-blue-400">~/about$</span>
+              <span className="text-gray-300">echo "Thanks for visiting!"</span>
+              <div className="w-2 h-4 bg-blue-500 ml-1 animate-pulse" />
+            </div>
           </div>
         </motion.section>
       </div>

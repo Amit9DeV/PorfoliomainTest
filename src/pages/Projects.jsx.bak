@@ -389,18 +389,38 @@ export default function Projects() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Load projects from localStorage on component mount
+  // Load projects from localStorage on component mount and when projects are updated
   useEffect(() => {
-    const customProjects = localStorage.getItem("admin_projects");
-    if (customProjects) {
-      try {
-        const parsedProjects = JSON.parse(customProjects);
-        setAllProjects([...defaultProjects, ...parsedProjects]);
-      } catch (e) {
-        console.error("Failed to parse custom projects", e);
+    // Function to load projects from localStorage
+    const loadProjects = () => {
+      const customProjects = localStorage.getItem("admin_projects");
+      if (customProjects) {
+        try {
+          const parsedProjects = JSON.parse(customProjects);
+          setAllProjects([...defaultProjects, ...parsedProjects]);
+        } catch (e) {
+          console.error("Failed to parse custom projects", e);
+          setAllProjects(defaultProjects);
+        }
+      } else {
         setAllProjects(defaultProjects);
       }
-    }
+    };
+    
+    // Load projects initially
+    loadProjects();
+    
+    // Add event listener for project updates
+    const handleProjectsUpdated = () => {
+      loadProjects();
+    };
+    
+    window.addEventListener('projectsUpdated', handleProjectsUpdated);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('projectsUpdated', handleProjectsUpdated);
+    };
   }, []);
 
   // Filter projects by category and search query
@@ -628,13 +648,13 @@ export default function Projects() {
                       </div>
                     </div>
                   </div>
-        </div>
+                </div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
-
+      
       {/* Terminal prompt at the end */}
       <div className="flex justify-center mt-16">
         <div className="font-mono text-xs flex items-center gap-2">

@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
+import Admin from "./pages/Admin";
 import { TransitionProvider } from "./transitions/ContentTransition";
 import TransitionComponent from "./transitions/Transiton";
 import { Canvas } from "@react-three/fiber";
@@ -111,6 +112,21 @@ function App() {
                         transition={{ duration: 0.5 }}
                       >
                         <Contact />
+                      </motion.div>
+                    </TransitionComponent>
+                  }
+                />
+                <Route
+                  path="Admin"
+                  element={
+                    <TransitionComponent>
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <Admin />
                       </motion.div>
                     </TransitionComponent>
                   }
