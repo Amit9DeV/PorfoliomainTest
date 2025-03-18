@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Github, Link, Code, Star, ArrowDown, ArrowRight, Eye, Terminal } from "iconoir-react";
 import {
@@ -285,90 +285,50 @@ const FilterBar = ({ activeFilter, setActiveFilter, filters }) => {
 };
 
 // Updated ProjectCard component with terminal style
-const ProjectCard = ({ project, index, onClick }) => {
+const ProjectCard = memo(({ project, index, onClick }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="h-full"
-      layoutId={`project-container-${project.title}`}
+      transition={{ delay: index * 0.1 }}
+      className="group relative bg-black/30 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/5 hover:border-blue-500/50 transition-all duration-300"
+      onClick={() => onClick(project)}
     >
-      <Card3D className="group h-full bg-black/20 backdrop-blur-lg rounded-xl overflow-hidden border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 shadow-lg hover:shadow-blue-900/20">
-        <div className="relative h-full flex flex-col">
-          {/* Project Image with Terminal Header */}
-          <div className="relative">
-            <TerminalHeader title={`~/projects/${project.title.toLowerCase().replace(/\s+/g, "-")}.png`} />
-            <div className="relative aspect-video border-b border-blue-500/20">
-              <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-              
-              {/* Overlay with Play Button */}
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 rounded-full bg-blue-600/90 text-white"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onClick(project);
-                  }}
-                >
-                  <Eye className="w-6 h-6" />
-                </motion.button>
-              </div>
-              
-              {/* Terminal info overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/70 backdrop-blur-sm font-mono text-xs text-green-400">
-                $ view --project "{project.title}"
-              </div>
-            </div>
-          </div>
-
-          {/* Project Content */}
-          <div className="p-5 flex flex-col flex-1">
-            <h3 className="text-xl font-bold text-white font-mono mb-2 flex items-center gap-2">
-              <span className="text-blue-400">$</span> {project.title}
-            </h3>
-            
-            <p className="text-gray-400 mb-4 text-sm border-l-2 border-blue-500/20 pl-3">
-              {project.description}
-            </p>
-            
-            <div className="flex flex-wrap gap-2 mb-6">
-              {project.tags.map((tag, i) => (
-                <TechTag key={tag} tag={tag} icon={techStackIcons[tag]} index={i} />
-              ))}
-            </div>
-            
-            <div className="mt-auto flex justify-between items-center pt-4 border-t border-blue-500/10">
-              <div className="flex gap-4">
-                <a
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-sm text-gray-400 hover:text-blue-400 transition-colors font-mono"
-                >
-                  <Github className="w-4 h-4" />
-                  <span>repo</span>
-                </a>
-                <a
-                  href={project.liveLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-sm text-gray-400 hover:text-blue-400 transition-colors font-mono"
-                >
-                  <Link className="w-4 h-4" />
-                  <span>demo</span>
-                </a>
-              </div>
-              <span className="text-xs text-gray-500 font-mono">{project.category}</span>
-            </div>
-          </div>
+      <div className="relative aspect-video overflow-hidden">
+        {!isImageLoaded && (
+          <div className="absolute inset-0 bg-black/50 animate-pulse" />
+        )}
+        <img
+          src={project.image}
+          alt={project.title}
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            isImageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          loading="lazy"
+          onLoad={() => setIsImageLoaded(true)}
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="text-xl font-bold text-white mb-2">{project.title}</h3>
+        <p className="text-gray-400 text-sm mb-4 line-clamp-2">{project.description}</p>
+        <div className="flex flex-wrap gap-2">
+          {project.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-1 text-xs rounded-full bg-blue-900/30 text-blue-400"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
-      </Card3D>
+      </div>
     </motion.div>
   );
-};
+});
+
+ProjectCard.displayName = 'ProjectCard';
 
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("All");

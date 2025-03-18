@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import {
   SiReact,
   SiNodedotjs,
@@ -70,89 +70,32 @@ const ParticleBackground = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
+  const particles = useMemo(() => {
+    return Array.from({ length: 50 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      size: Math.random() * 2 + 1,
+      speedX: Math.random() * 0.5 - 0.25,
+      speedY: Math.random() * 0.5 - 0.25,
+      opacity: Math.random() * 0.5 + 0.2,
+    }));
+  }, []);
+
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    canvas.width = dimensions.width;
-    canvas.height = dimensions.height;
-    
-    const particlesArray = [];
-    const numberOfParticles = Math.min(dimensions.width, dimensions.height) * 0.05;
-    let hue = 220; // Start with blue hue
-    
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 1.5 + 1;
-        this.speedX = Math.random() * 1.5 - 0.75;
-        this.speedY = Math.random() * 1.5 - 0.75;
-        this.color = `hsla(${hue}, 100%, 70%, ${Math.random() * 0.3 + 0.1})`;
-      }
-      
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        
-        if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
-        if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
-      }
-      
-      draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    
-    const init = () => {
-      for (let i = 0; i < numberOfParticles; i++) {
-        particlesArray.push(new Particle());
-      }
-    };
-    
-    const connect = () => {
-      const maxDistance = 100;
-      for (let a = 0; a < particlesArray.length; a++) {
-        for (let b = a; b < particlesArray.length; b++) {
-          const dx = particlesArray[a].x - particlesArray[b].x;
-          const dy = particlesArray[a].y - particlesArray[b].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < maxDistance) {
-            const opacity = 1 - (distance / maxDistance);
-            ctx.strokeStyle = `rgba(70, 130, 230, ${opacity * 0.2})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-            ctx.stroke();
-          }
-        }
-      }
-    };
-    
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-      }
-      connect();
-      
-      hue += 0.05;
+      setParticles(prev => 
+        prev.map(particle => ({
+          ...particle,
+          x: (particle.x + particle.speedX + window.innerWidth) % window.innerWidth,
+          y: (particle.y + particle.speedY + window.innerHeight) % window.innerHeight,
+        }))
+      );
       requestAnimationFrame(animate);
     };
-    
-    init();
-    animate();
-    
-    return () => {
-      // Cleanup if needed
-    };
-  }, [dimensions]);
+
+    const animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, []);
   
   return (
     <canvas

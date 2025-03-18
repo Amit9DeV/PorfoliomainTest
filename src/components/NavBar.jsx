@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useState, useEffect, memo, useCallback } from "react";
+import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Code } from "iconoir-react";
+import { Link } from "react-router-dom";
+import { Menu, X } from "iconoir-react";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -25,6 +27,26 @@ const TerminalTab = ({ children, isActive }) => (
     </div>
   </div>
 );
+
+const NavLink = memo(({ to, children, isActive }) => (
+  <Link
+    to={to}
+    className={`relative px-4 py-2 text-sm font-medium transition-colors ${
+      isActive ? "text-blue-400" : "text-gray-300 hover:text-white"
+    }`}
+  >
+    {children}
+    {isActive && (
+      <motion.div
+        layoutId="activeNav"
+        className="absolute inset-0 bg-blue-500/10 rounded-lg"
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      />
+    )}
+  </Link>
+));
+
+NavLink.displayName = "NavLink";
 
 export default function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,6 +77,19 @@ export default function NavBar() {
       document.body.style.overflow = "auto";
     };
   }, [isMobileMenuOpen]);
+
+  const toggleMenu = useCallback(() => {
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const closeMenu = useCallback(() => {
+    setIsMobileMenuOpen(false);
+  }, []);
+
+  // Close menu when route changes
+  useEffect(() => {
+    closeMenu();
+  }, [location, closeMenu]);
 
   return (
     <motion.header
@@ -222,22 +257,12 @@ export default function NavBar() {
                   <NavLink
                     key={item.name}
                     to={item.href}
-                    className={({ isActive }) =>
-                      `relative px-4 py-2.5 transition-all duration-300 border-r border-blue-900/30 last:border-r-0 ${
-                        isActive
-                          ? "bg-blue-900/30 text-white"
-                          : "text-gray-400 hover:text-white hover:bg-blue-900/10"
-                      }`
-                    }
+                    isActive={location.pathname === item.href}
                   >
-                    {({ isActive }) => (
-                      <TerminalTab isActive={isActive}>
-                        <div className="flex items-center space-x-1.5">
-                          <Code className={`w-4 h-4 ${isActive ? "text-blue-400" : "text-gray-500"}`} />
-                          <span className="font-mono text-sm">{item.name.toLowerCase()}.sh</span>
-                        </div>
-                      </TerminalTab>
-                    )}
+                    <div className="flex items-center space-x-1.5">
+                      <Code className={`w-4 h-4 ${location.pathname === item.href ? "text-blue-400" : "text-gray-500"}`} />
+                      <span className="font-mono text-sm">{item.name.toLowerCase()}.sh</span>
+                    </div>
                   </NavLink>
                 ))}
               </div>
@@ -254,7 +279,7 @@ export default function NavBar() {
           {/* Mobile Menu Button - Terminal Style */}
           <div className="md:hidden">
             <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={toggleMenu}
               className="relative p-2 rounded-lg border border-blue-500/30 bg-black/30 backdrop-blur-sm hover:bg-blue-900/20 transition-all duration-300 group"
               aria-label="Toggle menu"
             >
@@ -278,7 +303,7 @@ export default function NavBar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="fixed inset-0 bg-black/80 backdrop-blur-md z-40"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeMenu}
             />
             
             {/* Side Menu */}
@@ -300,7 +325,7 @@ export default function NavBar() {
                   <span className="text-white font-mono text-sm">navigation.sh</span>
                 </div>
                 <button 
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={closeMenu}
                   className="text-gray-400 hover:text-white"
                 >
                   <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -321,32 +346,17 @@ export default function NavBar() {
                     <NavLink
                       key={item.name}
                       to={item.href}
-                      className={({ isActive }) =>
-                        `block font-mono transition-all duration-300 ${
-                          isActive
-                            ? "text-white"
-                            : "text-gray-400 hover:text-white"
-                        }`
-                      }
+                      isActive={location.pathname === item.href}
                     >
-                      {({ isActive }) => (
-                        <motion.div 
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="relative p-3 rounded-lg group hover:bg-blue-900/20"
-                        >
-                          <div className="flex items-center">
-                            <span className="text-blue-400 mr-2">$</span>
-                            <span>cd ~/{item.name.toLowerCase()}</span>
-                          </div>
-                          {isActive && (
-                            <div className="mt-1 pl-5 text-xs text-green-400">
-                              # Current location
-                              <div className="w-2 h-4 bg-blue-500 inline-block ml-1 animate-pulse align-middle" />
-                            </div>
-                          )}
-                        </motion.div>
+                      <div className="flex items-center">
+                        <span className="text-blue-400 mr-2">$</span>
+                        <span>cd ~/{item.name.toLowerCase()}</span>
+                      </div>
+                      {location.pathname === item.href && (
+                        <div className="mt-1 pl-5 text-xs text-green-400">
+                          # Current location
+                          <div className="w-2 h-4 bg-blue-500 inline-block ml-1 animate-pulse align-middle" />
+                        </div>
                       )}
                     </NavLink>
                   ))}

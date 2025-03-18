@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Terminal, Lock, Plus, Check, Eye, Refresh, Trash, Link, Github } from "iconoir-react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import debounce from 'lodash/debounce';
 
 // Terminal header component
 const TerminalHeader = ({ title }) => (
@@ -32,6 +33,7 @@ const categories = ["Full Stack", "Frontend", "Backend", "UI/UX"];
 const ADMIN_PASSWORD = "amit1234";
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
@@ -52,6 +54,10 @@ export default function Admin() {
   
   // Success message state
   const [showSuccess, setShowSuccess] = useState(false);
+  const [newTag, setNewTag] = useState("");
+  const [newFeature, setNewFeature] = useState("");
+  const [previewImage, setPreviewImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Load saved projects on mount
   useEffect(() => {
@@ -110,52 +116,69 @@ export default function Admin() {
     }
   };
   
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    if (!formData.title || !formData.description || !formData.image || !formData.tags.length) {
-      alert("Please fill in all required fields");
-      return;
+  // Debounced image preview
+  const debouncedSetPreviewImage = useCallback(
+    debounce((url) => {
+      setPreviewImage(url);
+    }, 300),
+    []
+  );
+
+  // Optimized image preview handler
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, image: reader.result }));
+        debouncedSetPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
+  };
+  
+  // Optimized form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
     
-    // Filter out empty features
-    const filteredFeatures = formData.features.filter(f => f.trim() !== "");
-    
-    // Create new project
-    const newProject = {
-      ...formData,
-      features: filteredFeatures,
-      id: Date.now().toString() // Simple unique ID
-    };
-    
-    // Update projects
-    const updatedProjects = [...projects, newProject];
-    setProjects(updatedProjects);
-    
-    // Save to localStorage
-    localStorage.setItem("admin_projects", JSON.stringify(updatedProjects));
-    
-    // Dispatch a custom event to notify other components about the change
-    window.dispatchEvent(new Event('projectsUpdated'));
-    
-    // Reset form
-    setFormData({
-      title: "",
-      description: "",
-      image: "",
-      video: "",
-      tags: [],
-      liveLink: "",
-      githubLink: "",
-      category: "Full Stack",
-      features: ["", "", "", "", ""]
-    });
-    
-    // Show success message
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    try {
+      const newProject = {
+        ...formData,
+        id: Date.now().toString(),
+      };
+      
+      const updatedProjects = [...projects, newProject];
+      setProjects(updatedProjects);
+      localStorage.setItem("admin_projects", JSON.stringify(updatedProjects));
+      
+      // Dispatch event for Projects page
+      window.dispatchEvent(new Event('projectsUpdated'));
+      
+      setFormData({
+        title: "",
+        description: "",
+        image: "",
+        video: "",
+        tags: [],
+        features: [],
+        liveLink: "",
+        githubLink: "",
+        category: "Full Stack",
+      });
+      setPreviewImage(null);
+      setNewTag("");
+      setNewFeature("");
+      
+      // Show success message
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (err) {
+      setAuthError("Error adding project. Please try again.");
+      setTimeout(() => setAuthError(""), 3000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   // Delete a project
