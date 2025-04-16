@@ -15,7 +15,6 @@ import { RiTailwindCssFill } from "react-icons/ri";
 import { LiaNode } from "react-icons/lia";
 import { SiExpress } from "react-icons/si";
 import { SiMongodb } from "react-icons/si";
-import { motion } from "framer-motion";
 import { Terminal, ArrowRight, Code, Download, ArrowDown } from "iconoir-react";
 
 // Terminal header component
@@ -96,28 +95,11 @@ const experiences = [
 ];
 
 export default function About() {
-  useAdvancedScrollAnimation({
-    triggerSelector: ".animateSection2",
-    animationConfig: {
-      from: { opacity: 0, scale: 0.5 },
-      to: { opacity: 1, scale: 1 },
-    },
-    scrollTriggerConfig: {
-      start: "top 90%",
-      end: "bottom 0%",
-    },
-  });
-
   return (
     <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* About Me Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
-        >
+        <section className="space-y-8">
           <div className="mb-6">
             <TerminalHeader title="~/personal-info.md" />
             <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
@@ -126,12 +108,7 @@ export default function About() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               <h2 className="text-2xl font-bold font-mono text-white border-l-2 border-blue-500 pl-3">
                 <span className="text-blue-400">function</span> <span className="text-green-400">aboutMe</span><span className="text-yellow-500">()</span> {"{"}
               </h2>
@@ -150,13 +127,8 @@ export default function About() {
                 </p>
               </div>
               <div className="text-white font-mono">{"}"}</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="relative"
-            >
+            </div>
+            <div className="relative">
               <TerminalHeader title="~/workspace.jpg" />
               <div className="aspect-w-16 aspect-h-9 rounded-b-lg overflow-hidden border border-blue-500/20 border-t-0">
                 <img
@@ -168,17 +140,12 @@ export default function About() {
                   $ image --view workspace.jpg --resolution 1920x1080
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* Skills Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="space-y-8"
-        >
+        <section className="space-y-8">
           <div className="mb-6">
             <TerminalHeader title="~/skills.json" />
             <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
@@ -187,12 +154,9 @@ export default function About() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {skills.map((skill, index) => (
-              <motion.div
+            {skills.map((skill) => (
+              <div
                 key={skill.name}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index }}
                 className="bg-black/30 backdrop-blur-xl rounded-lg p-4 space-y-2 border border-blue-500/20"
               >
                 <div className="flex justify-between items-center">
@@ -200,28 +164,21 @@ export default function About() {
                   <span className="text-blue-400 font-mono text-sm">{skill.level}%</span>
                 </div>
                 <div className="h-2 bg-blue-900/20 rounded-full overflow-hidden border border-blue-500/10">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${skill.level}%` }}
-                    transition={{ duration: 1, delay: 0.2 * index }}
+                  <div
                     className="h-full bg-gradient-to-r from-blue-500 to-blue-700"
+                    style={{ width: `${skill.level}%` }}
                   />
                 </div>
                 <div className="text-xs text-gray-400 font-mono">
                   [<span className="text-yellow-500">{skill.level >= 80 ? 'Expert' : skill.level >= 70 ? 'Advanced' : 'Intermediate'}</span>]
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.section>
+        </section>
 
         {/* Experience Timeline */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="space-y-8"
-        >
+        <section className="space-y-8">
           <div className="mb-6">
             <TerminalHeader title="~/experience.log" />
             <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
@@ -230,12 +187,9 @@ export default function About() {
           </div>
           
           <div className="space-y-8">
-            {experiences.map((exp, index) => (
-              <motion.div
+            {experiences.map((exp) => (
+              <div
                 key={exp.year}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index }}
                 className="relative pl-8 pb-8 border-l-2 border-blue-500/30 last:pb-0"
               >
                 <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-blue-500" />
@@ -245,7 +199,7 @@ export default function About() {
                   <p className="text-gray-400 font-mono text-sm">@{exp.company}</p>
                   <p className="text-gray-300 border-l-2 border-blue-500/20 pl-3">{exp.description}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
           
@@ -257,7 +211,7 @@ export default function About() {
               <div className="w-2 h-4 bg-blue-500 ml-1 animate-pulse" />
             </div>
           </div>
-        </motion.section>
+        </section>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 // src/App.js
 import React, { useState, useEffect, useRef, memo } from "react";
-import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Github, Link, Code, Star, ArrowDown, ArrowRight, Eye, Terminal } from "iconoir-react";
 import {
   SiReact,
@@ -34,84 +33,37 @@ const TerminalHeader = ({ title }) => (
 );
 
 // 3D Card effect component
-const Card3D = ({ children, className }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  
-  const rotateX = useTransform(y, [-100, 100], [5, -5]);
-  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
-  
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct * 100);
-    y.set(yPct * 100);
-  };
-  
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-  
-  return (
-    <motion.div
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className={className}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-    >
-      {children}
-    </motion.div>
-  );
-};
+const Card3D = ({ children, className }) => (
+  <div className={className}>
+    {children}
+  </div>
+);
 
 // Tag component for tech stack
-const TechTag = ({ tag, icon: Icon, index }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="group relative"
-    >
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/50 to-blue-800/50 rounded-full opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
-      <div className="relative flex items-center gap-1 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-blue-500/20 group-hover:border-blue-500/30 transition-all duration-300">
-        {Icon && (
-          <Icon className="w-4 h-4 text-blue-400 transition-transform duration-300 group-hover:scale-110" />
-        )}
-        <span className="text-xs font-medium font-mono text-white">{tag}</span>
-      </div>
-    </motion.div>
-  );
-};
+const TechTag = ({ tag, icon: Icon }) => (
+  <div className="group relative">
+    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/50 to-blue-800/50 rounded-full opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+    <div className="relative flex items-center gap-1 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-blue-500/20 group-hover:border-blue-500/30 transition-all duration-300">
+      {Icon && (
+        <Icon className="w-4 h-4 text-blue-400 transition-transform duration-300 group-hover:scale-110" />
+      )}
+      <span className="text-xs font-medium font-mono text-white">{tag}</span>
+    </div>
+  </div>
+);
 
 // Section Title component with terminal style
 const SectionTitle = ({ title, subtitle }) => (
   <div className="mb-12">
     <TerminalHeader title="~/projects" />
     <div className="bg-black/30 backdrop-blur-md border border-blue-500/20 border-t-0 p-4 rounded-b-lg">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="space-y-4"
-      >
+      <div className="space-y-4">
         <div className="font-mono text-xs text-blue-400 mb-2">$ ls -la ~/projects | grep "featured" | sort</div>
         <h1 className="text-3xl md:text-4xl font-bold text-white font-mono border-l-2 border-blue-500/30 pl-4">
           {title}
         </h1>
         {subtitle && <p className="text-gray-400 text-lg pl-4 border-l border-dashed border-blue-500/20">{subtitle}</p>}
-      </motion.div>
+      </div>
     </div>
   </div>
 );
@@ -254,45 +206,35 @@ const defaultProjects = [
 const categories = ["All", "Full Stack", "Frontend", "Backend"];
 
 // Terminal-style filter component
-const FilterBar = ({ activeFilter, setActiveFilter, filters }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="mb-10"
-    >
-      <div className="bg-black/30 backdrop-blur-md rounded-lg border border-blue-500/20 p-2 inline-block">
-        <div className="font-mono text-xs text-blue-400 mb-2 px-2">$ filter --category</div>
-        <div className="flex flex-wrap gap-2">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-4 py-2 rounded-md font-mono text-sm transition-all ${
-                activeFilter === filter
-                  ? "bg-blue-900/50 text-white border border-blue-500/50"
-                  : "text-gray-400 hover:text-white bg-black/20 border border-white/5 hover:border-blue-500/30"
-              }`}
-            >
-              {filter === "All" ? "all" : filter.toLowerCase().replace(" ", "-")}
-            </button>
-          ))}
-        </div>
+const FilterBar = ({ activeFilter, setActiveFilter, filters }) => (
+  <div className="mb-10">
+    <div className="bg-black/30 backdrop-blur-md rounded-lg border border-blue-500/20 p-2 inline-block">
+      <div className="font-mono text-xs text-blue-400 mb-2 px-2">$ filter --category</div>
+      <div className="flex flex-wrap gap-2">
+        {filters.map((filter) => (
+          <button
+            key={filter}
+            onClick={() => setActiveFilter(filter)}
+            className={`px-4 py-2 rounded-md font-mono text-sm transition-all ${
+              activeFilter === filter
+                ? "bg-blue-900/50 text-white border border-blue-500/50"
+                : "text-gray-400 hover:text-white bg-black/20 border border-white/5 hover:border-blue-500/30"
+            }`}
+          >
+            {filter === "All" ? "all" : filter.toLowerCase().replace(" ", "-")}
+          </button>
+        ))}
       </div>
-    </motion.div>
-  );
-};
+    </div>
+  </div>
+);
 
 // Updated ProjectCard component with terminal style
-const ProjectCard = memo(({ project, index, onClick }) => {
+const ProjectCard = memo(({ project, onClick }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <div
       className="group relative bg-black/30 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/5 hover:border-blue-500/50 transition-all duration-300"
       onClick={() => onClick(project)}
     >
@@ -324,7 +266,7 @@ const ProjectCard = memo(({ project, index, onClick }) => {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 });
 
@@ -333,7 +275,6 @@ ProjectCard.displayName = 'ProjectCard';
 export default function Projects() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const modalRef = useRef(null);
   const [allProjects, setAllProjects] = useState(defaultProjects);
@@ -393,7 +334,7 @@ export default function Projects() {
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black">
           <div className="absolute inset-0 opacity-30"
-        style={{
+            style={{
               backgroundImage: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(30,64,175,0.2) 0%, transparent 60%)`
             }}
           />
@@ -418,181 +359,147 @@ export default function Projects() {
         />
 
         {/* Projects Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          <AnimatePresence>
-            {filteredProjects.length > 0 ? (
-              filteredProjects.map((project, index) => (
-                <ProjectCard
-                  key={project.title}
-                  project={project}
-                  index={index}
-                  onClick={(project) => setSelectedProject(project)}
-                />
-              ))
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="col-span-full flex flex-col items-center justify-center py-20 text-center"
-              >
-                <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-xl">
-                  <div className="text-5xl mb-4">🔍</div>
-                  <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
-                  <p className="text-gray-400">Try adjusting your search or category filter</p>
-                  <button
-                    onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
-                    className="mt-6 px-4 py-2 bg-blue-600 rounded-lg text-white text-sm font-medium hover:bg-blue-700 transition-colors"
-                  >
-                    Reset Filters
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.title}
+                project={project}
+                onClick={(project) => setSelectedProject(project)}
+              />
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-20 text-center">
+              <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-xl">
+                <div className="text-5xl mb-4">🔍</div>
+                <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
+                <p className="text-gray-400">Try adjusting your search or category filter</p>
+                <button
+                  onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
+                  className="mt-6 px-4 py-2 bg-blue-600 rounded-lg text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Project Details Modal */}
-        <AnimatePresence>
-          {selectedProject && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8"
-              onClick={() => setSelectedProject(null)}
+        {selectedProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8">
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-md" />
+            <div
+              ref={modalRef}
+              className="relative bg-black/60 backdrop-blur-xl rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/10 shadow-2xl"
             >
-              <motion.div 
-                className="fixed inset-0 bg-black/70 backdrop-blur-md"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              />
-              <motion.div
-                ref={modalRef}
-                initial={{ scale: 0.9, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="relative bg-black/60 backdrop-blur-xl rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/10 shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="relative">
-                  {/* Modal Header */}
-                  <div className="sticky top-0 z-10 bg-black/80 backdrop-blur-md px-6 py-4 border-b border-white/10 flex justify-between items-center">
-                    <h2 className="text-2xl font-bold text-white">{selectedProject.title}</h2>
-                    <button
-                      onClick={() => setSelectedProject(null)}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                    >
-                      <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+              <div className="relative">
+                {/* Modal Header */}
+                <div className="sticky top-0 z-10 bg-black/80 backdrop-blur-md px-6 py-4 border-b border-white/10 flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-white">{selectedProject.title}</h2>
+                  <button
+                    onClick={() => setSelectedProject(null)}
+                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                  >
+                    <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="p-6 space-y-8">
+                  {/* Project Media */}
+                  <div className="relative rounded-xl overflow-hidden">
+                    {selectedProject.video ? (
+                      <video className="w-full rounded-xl" controls>
+                        <source src={selectedProject.video} type="video/mp4" />
+                      </video>
+                    ) : (
+                      <img
+                        src={selectedProject.image}
+                        alt={selectedProject.title}
+                        className="w-full rounded-xl"
+                      />
+                    )}
                   </div>
 
-                  <div className="p-6 space-y-8">
-                    {/* Project Media */}
-                    <div className="relative rounded-xl overflow-hidden">
-                      {selectedProject.video ? (
-                        <video className="w-full rounded-xl" controls>
-                          <source src={selectedProject.video} type="video/mp4" />
-              </video>
-                      ) : (
-                        <img
-                          src={selectedProject.image}
-                          alt={selectedProject.title}
-                          className="w-full rounded-xl"
-                        />
-                      )}
+                  {/* Project Content */}
+                  <div className="grid md:grid-cols-3 gap-8">
+                    {/* Left Column */}
+                    <div className="md:col-span-2 space-y-6">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-3">Project Overview</h3>
+                        <p className="text-gray-300 leading-relaxed">{selectedProject.description}</p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-white">Key Features</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {selectedProject.features.map((feature, index) => (
+                            <div
+                              key={index}
+                              className="flex items-start gap-2 text-gray-300"
+                            >
+                              <div className="p-1 bg-blue-900/30 rounded-full mt-0.5">
+                                <Star className="w-3.5 h-3.5 text-blue-400" />
+                              </div>
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Project Content */}
-                    <div className="grid md:grid-cols-3 gap-8">
-                      {/* Left Column */}
-                      <div className="md:col-span-2 space-y-6">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Project Overview</h3>
-                          <p className="text-gray-300 leading-relaxed">{selectedProject.description}</p>
-                        </div>
-
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-white">Key Features</h3>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {selectedProject.features.map((feature, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="flex items-start gap-2 text-gray-300"
+                    {/* Right Column */}
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-lg font-semibold text-white mb-3">Tech Stack</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                          {selectedProject.tags.map((tag) => {
+                            const Icon = techStackIcons[tag];
+                            return (
+                              <div
+                                key={tag}
+                                className="flex items-center gap-2 p-2 rounded-lg bg-black/40 border border-white/5"
                               >
-                                <div className="p-1 bg-blue-900/30 rounded-full mt-0.5">
-                                  <Star className="w-3.5 h-3.5 text-blue-400" />
-                                </div>
-                                <span>{feature}</span>
-                              </motion.div>
-                            ))}
-                          </div>
-        </div>
-      </div>
-
-                      {/* Right Column */}
-                      <div className="space-y-6">
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Tech Stack</h3>
-                          <div className="grid grid-cols-2 gap-3">
-                            {selectedProject.tags.map((tag, index) => {
-                              const Icon = techStackIcons[tag];
-                              return (
-                                <motion.div
-                                  key={tag}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: 0.1 + index * 0.05 }}
-                                  className="flex items-center gap-2 p-2 rounded-lg bg-black/40 border border-white/5"
-                                >
-                                  {Icon && <Icon className="w-5 h-5 text-blue-400" />}
-                                  <span className="text-sm text-gray-300">{tag}</span>
-                                </motion.div>
-                              );
-                            })}
-                          </div>
+                                {Icon && <Icon className="w-5 h-5 text-blue-400" />}
+                                <span className="text-sm text-gray-300">{tag}</span>
+                              </div>
+                            );
+                          })}
                         </div>
+                      </div>
 
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold text-white">Project Links</h3>
-                          <div className="space-y-3">
-                            <a
-                              href={selectedProject.liveLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 px-6 py-3 w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white font-medium hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300"
-                            >
-                              <Link className="w-5 h-5" />
-                              <span>View Live Demo</span>
-                            </a>
-                            <a
-                              href={selectedProject.githubLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 px-6 py-3 w-full rounded-lg bg-black/40 border border-white/10 text-white font-medium hover:bg-black/60 transition-all duration-300"
-                            >
-                              <SiGithub className="w-5 h-5" />
-                              <span>View Source Code</span>
-                            </a>
-                          </div>
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-white">Project Links</h3>
+                        <div className="space-y-3">
+                          <a
+                            href={selectedProject.liveLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 px-6 py-3 w-full rounded-lg bg-gradient-to-r from-blue-600 to-blue-800 text-white font-medium hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300"
+                          >
+                            <Link className="w-5 h-5" />
+                            <span>View Live Demo</span>
+                          </a>
+                          <a
+                            href={selectedProject.githubLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 px-6 py-3 w-full rounded-lg bg-black/40 border border-white/10 text-white font-medium hover:bg-black/60 transition-all duration-300"
+                          >
+                            <SiGithub className="w-5 h-5" />
+                            <span>View Source Code</span>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
-        </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Terminal prompt at the end */}
