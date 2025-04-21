@@ -14,6 +14,8 @@ import {
   SiLinkedin,
 } from "react-icons/si";
 import { Download, Mail, Code, Rocket, Star, ArrowDown, ArrowRight, Terminal } from "iconoir-react";
+import smoothscroll from 'smoothscroll-polyfill';
+
 
 // Terminal header component
 const TerminalHeader = ({ title }) => (
@@ -68,16 +70,6 @@ const ParticleBackground = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   
-  const particles = useMemo(() => {
-    return Array.from({ length: 50 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 2 + 1,
-      speedX: Math.random() * 0.5 - 0.25,
-      speedY: Math.random() * 0.5 - 0.25,
-      opacity: Math.random() * 0.5 + 0.2,
-    }));
-  }, []);
 
   useEffect(() => {
     const animate = () => {
@@ -125,8 +117,6 @@ const Card3D = ({ children, className }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
-  const rotateX = useTransform(y, [-100, 100], [5, -5]);
-  const rotateY = useTransform(x, [-100, 100], [-5, 5]);
   
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -200,35 +190,19 @@ const stats = [
 ];
 
 export default function Home() {
+
+  useEffect(() => {
+    if (!('scrollBehavior' in document.documentElement.style)) {
+      smoothscroll.polyfill();
+    }
+  }, []);
   // Particle effect state
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeSection, setActiveSection] = useState("hero");
   const heroRef = useRef(null);
   const aboutRef = useRef(null);
   
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      
-      if (heroRef.current && scrollPosition < heroRef.current.offsetHeight) {
-        setActiveSection("hero");
-      } else if (aboutRef.current) {
-        setActiveSection("about");
-      }
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('scroll', handleScroll);
-    
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+
   
   const scrollToAbout = () => {
     aboutRef.current.scrollIntoView({ behavior: 'smooth' });

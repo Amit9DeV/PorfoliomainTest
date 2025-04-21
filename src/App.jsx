@@ -57,7 +57,7 @@ function App() {
             <AnimatePresence mode="wait">
               <Routes>
                 <Route
-                  path=""
+                  path="/"
                   element={
                     <TransitionComponent>
                       <motion.div

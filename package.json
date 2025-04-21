@@ -37,6 +37,7 @@
     "react-scripts": "^5.0.1",
     "react-transition-group": "^4.4.5",
     "short-uuid": "^5.2.0",
+    "smoothscroll-polyfill": "^0.4.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.167.1",
