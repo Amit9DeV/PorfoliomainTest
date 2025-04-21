@@ -1,53 +1,49 @@
+import { useRef, useState, useEffect } from "react";
+import { useFrame } from "@react-three/fiber";
+import { easing } from "maath";
 import * as THREE from 'three'
-import { extend } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
+import { extend } from '@react-three/fiber'
 
 // Tutorial: https://www.youtube.com/watch?v=f4s1h2YETNY
 const WaveMaterial = shaderMaterial(
   {
     time: 0,
-    resolution: new THREE.Vector2(),
-    pointer: new THREE.Vector2()
+    pointer: new THREE.Vector3(),
+    resolution: new THREE.Vector2()
   },
-  /*glsl*/ `
-      varying vec2 vUv;
-      void main() {
-        vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-        vec4 viewPosition = viewMatrix * modelPosition;
-        vec4 projectionPosition = projectionMatrix * viewPosition;
-        gl_Position = projectionPosition;
-        vUv = uv;
-      }`,
-  /*glsl*/ `
-      uniform float time;
-      uniform vec2 resolution;
-      uniform vec2 pointer;
-      varying vec2 vUv;      
+  /*glsl*/`
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  /*glsl*/`
+    uniform float time;
+    uniform vec3 pointer;
+    uniform vec2 resolution;
+    varying vec2 vUv;
+    
+    void main() {
+      vec2 uv = vUv;
+      vec2 p = pointer.xy / resolution;
+      
+      // Simplified wave calculation
+      float wave = sin(uv.x * 10.0 + time) * 0.02;
+      wave += sin(uv.y * 10.0 + time) * 0.02;
+      
+      // Reduced color calculation
+      vec3 color = vec3(0.1, 0.2, 0.3);
+      color += vec3(wave * 0.5);
+      
+      gl_FragColor = vec4(color, 0.5);
+    }
+  `
+);
 
-      vec3 palette(float t) {
-        vec3 a = vec3(0.5, 0.5, 0.5);
-        vec3 b = vec3(0.5, 0.5, 0.5);
-        vec3 c = vec3(1.0, 1.0, 1.0);
-        vec3 d = vec3(0.263, 0.416, 0.557);
-        return a + b * cos(6.28318 * (c * t + d));
-      }
+WaveMaterial.key = "wave-material";
 
-      void main() {
-        vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / resolution.y;      
-        vec2 uv0 = uv;
-        vec3 finalColor = vec3(0.0);
-        uv = fract(uv * 1.5) - 0.5;     
-        uv = sin(uv * 0.5) - pointer;     
-        float d = length(uv) * exp(-length(uv0));
-        vec3 col = palette(length(uv0) + time * 0.4);
-        d = sin(d * 8.0 + time) / 8.0;
-        d = abs(d);
-        d = pow(0.02 / d, 2.0);
-        finalColor += col * d;
-        gl_FragColor = vec4(finalColor, 1.0);   
-      }`
-)
+extend({ WaveMaterial });
 
-extend({ WaveMaterial })
-
-export { WaveMaterial }
+export { WaveMaterial };

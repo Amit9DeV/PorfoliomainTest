@@ -1,46 +1,43 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { SwitchTransition, Transition } from 'react-transition-group';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
+import { memo } from "react";
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-
 import TransitionContext from './ContentTransition';
 
-const TransitionComponent = ({ children }) => {
+const TransitionComponent = memo(function TransitionComponent({ children }) {
   const location = useLocation();
   const { toggleCompleted } = useContext(TransitionContext);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <SwitchTransition>
-      <Transition
-        key={location.pathname}
-        timeout={500}
-        onEnter={(node) => {
-          toggleCompleted(false);
-          gsap.set(node, { autoAlpha: 0, scale: 0.8, xPercent: -100 });
-          gsap
-            .timeline({
-              paused: true,
-              onComplete: () => toggleCompleted(true),
-            })
-            .to(node, { autoAlpha: 1, xPercent: 0, duration: 0.25 })
-            .to(node, { scale: 1, duration: 0.25 })
-            .play();
-        }}
-        onExit={(node) => {
-          gsap
-            .timeline({ paused: true })
-            .to(node, { scale: 0.8, duration: 0.2 })
-            .to(node, { xPercent: 100, autoAlpha: 0, duration: 0.2 })
-            .play();
+    <AnimatePresence mode="wait">
+      <motion.div
+        initial={isMobile ? false : { opacity: 0, y: 20 }}
+        animate={isMobile ? false : { opacity: 1, y: 0 }}
+        exit={isMobile ? false : { opacity: 0, y: -20 }}
+        transition={{
+          duration: 0.2,
+          ease: "easeInOut",
         }}
       >
         {children}
-      </Transition>
-    </SwitchTransition>
+      </motion.div>
+    </AnimatePresence>
   );
-};
-
+});
 
 export default TransitionComponent;

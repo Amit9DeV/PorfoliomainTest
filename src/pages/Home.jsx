@@ -53,11 +53,22 @@ const CommandButton = ({ children, onClick, icon: Icon }) => {
 // Particle effect component
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [dimensions, setDimensions] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   });
   
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       setDimensions({
@@ -69,28 +80,39 @@ const ParticleBackground = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  
 
+  // Only run animation on desktop
   useEffect(() => {
-    const animate = () => {
-      setParticles(prev => 
-        prev.map(particle => ({
-          ...particle,
-          x: (particle.x + particle.speedX + window.innerWidth) % window.innerWidth,
-          y: (particle.y + particle.speedY + window.innerHeight) % window.innerHeight,
-        }))
-      );
-      requestAnimationFrame(animate);
+    if (isMobile) return;
+    
+    let animationFrame;
+    let lastTime = 0;
+    const fps = 20; // Further reduced FPS for mobile
+    
+    const animate = (currentTime) => {
+      if (currentTime - lastTime > 1000 / fps) {
+        setParticles(prev => 
+          prev.map(particle => ({
+            ...particle,
+            x: (particle.x + particle.speedX + window.innerWidth) % window.innerWidth,
+            y: (particle.y + particle.speedY + window.innerHeight) % window.innerHeight,
+          }))
+        );
+        lastTime = currentTime;
+      }
+      animationFrame = requestAnimationFrame(animate);
     };
 
-    const animationFrame = requestAnimationFrame(animate);
+    animationFrame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationFrame);
-  }, []);
+  }, [isMobile]);
+  
+  if (isMobile) return null;
   
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 -z-10 opacity-40"
+      className="absolute inset-0 -z-10 opacity-10" // Further reduced opacity
       style={{ background: 'transparent' }}
     />
   );
@@ -98,15 +120,35 @@ const ParticleBackground = () => {
 
 // Tech icon component with hover effect
 const TechIcon = ({ icon: Icon, name, color }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   return (
     <div className="relative group">
-      <div className="absolute -inset-2 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-r from-blue-600/30 to-blue-900/30 blur-lg transition-opacity duration-300" />
-      <div className="w-14 h-14 flex items-center justify-center rounded-xl bg-black/40 backdrop-blur-sm border border-white/5 group-hover:border-blue-500/30 transition-colors relative z-10">
-        <Icon className={`w-7 h-7 ${color} transition-transform duration-300 group-hover:scale-110`} />
+      {!isMobile && (
+        <div className="absolute -inset-1 rounded-xl opacity-0 group-hover:opacity-100 bg-blue-600/20 blur transition-opacity duration-200" />
+      )}
+      <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-black/40 backdrop-blur-sm border border-white/5 ${
+        !isMobile ? 'group-hover:border-blue-500/20 transition-colors' : ''
+      } relative z-10`}>
+        <Icon className={`w-6 h-6 ${color} ${
+          !isMobile ? 'transition-transform duration-200 group-hover:scale-105' : ''
+        }`} />
         
-        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-blue-900/30 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <span className="text-xs font-medium text-white">{name}</span>
-        </div>
+        {!isMobile && (
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-blue-900/20 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <span className="text-xs font-medium text-white">{name}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -116,21 +158,32 @@ const TechIcon = ({ icon: Icon, name, color }) => {
 const Card3D = ({ children, className }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const [isMobile, setIsMobile] = useState(false);
   
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const handleMouseMove = (e) => {
+    if (isMobile) return;
+    
     const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct * 100);
-    y.set(yPct * 100);
+    const xPct = (mouseX / rect.width - 0.5) * 10; // Further reduced rotation range
+    const yPct = (mouseY / rect.height - 0.5) * 10;
+    x.set(xPct);
+    y.set(yPct);
   };
   
   const handleMouseLeave = () => {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   };
@@ -138,7 +191,8 @@ const Card3D = ({ children, className }) => {
   return (
     <div
       style={{
-        transformStyle: "preserve-3d",
+        transformStyle: isMobile ? "flat" : "preserve-3d",
+        willChange: isMobile ? "auto" : "transform",
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}

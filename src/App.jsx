@@ -1,3 +1,4 @@
+import { memo, useCallback, useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -17,13 +18,15 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import "./App.css";
 
-function ShaderPlane() {
+// Memoize the ShaderPlane component
+const ShaderPlane = memo(function ShaderPlane() {
   const ref = useRef();
   const { viewport, size } = useThree();
   
   useFrame((state, delta) => {
-    ref.current.time += delta;
-    easing.damp3(ref.current.pointer, state.pointer, 0.2, delta);
+    if (!ref.current) return;
+    ref.current.time += delta * 0.5; // Reduced animation speed
+    easing.damp3(ref.current.pointer, state.pointer, 0.1, delta); // Reduced pointer damping
   });
   
   return (
@@ -36,17 +39,47 @@ function ShaderPlane() {
       />
     </mesh>
   );
-}
+});
+
+// Memoize the PageWrapper component
+const PageWrapper = memo(function PageWrapper({ children }) {
+  return (
+    <TransitionComponent>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }} // Reduced duration
+      >
+        {children}
+      </motion.div>
+    </TransitionComponent>
+  );
+});
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-black">
-      {/* Background Canvas */}
-      <div className="fixed inset-0 z-0">
-        <Canvas>
-          <ShaderPlane />
-        </Canvas>
-      </div>
+      {/* Background Canvas - Only render on desktop */}
+      {!isMobile && (
+        <div className="fixed inset-0 z-0">
+          <Canvas>
+            <ShaderPlane />
+          </Canvas>
+        </div>
+      )}
 
       {/* Content Container */}
       <div className="relative z-10">
@@ -59,76 +92,41 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <TransitionComponent>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <Home />
-                      </motion.div>
-                    </TransitionComponent>
+                    <PageWrapper>
+                      <Home />
+                    </PageWrapper>
                   }
                 />
                 <Route
                   path="About"
                   element={
-                    <TransitionComponent>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <About />
-                      </motion.div>
-                    </TransitionComponent>
+                    <PageWrapper>
+                      <About />
+                    </PageWrapper>
                   }
                 />
                 <Route
                   path="Projects"
                   element={
-                    <TransitionComponent>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <Projects />
-                      </motion.div>
-                    </TransitionComponent>
+                    <PageWrapper>
+                      <Projects />
+                    </PageWrapper>
                   }
                 />
                 <Route
                   path="Contact"
                   element={
-                    <TransitionComponent>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <Contact />
-                      </motion.div>
-                    </TransitionComponent>
+                    <PageWrapper>
+                      <Contact />
+                    </PageWrapper>
                   }
                 />
                 <Route
                   path="Admin"
                   element={
-                    <TransitionComponent>
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        <Admin />
-                      </motion.div>
-                    </TransitionComponent>
+                    <PageWrapper>
+                      <Admin />
+                    </PageWrapper>
                   }
                 />
               </Routes>
@@ -142,4 +140,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);
