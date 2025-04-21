@@ -399,7 +399,7 @@ export default function Home() {
                 className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex items-center"
                 onClick={scrollToAbout}
               >
-                <div className="font-mono text-xs flex items-center gap-2 cursor-pointer">
+                <div className="font-mono text-xs md:flex items-center gap-2 cursor-pointer hidden ">
                   <span className="text-green-400">visitor@portfolio:</span>
                   <span className="text-blue-400">~$</span>
                   <span className="text-gray-300">scroll --to about</span>
