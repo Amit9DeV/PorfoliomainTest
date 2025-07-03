@@ -15,6 +15,7 @@ import { useRef } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import ScrollToTop from "./components/ScrollToTop";
 
 import "./App.css";
 
@@ -72,6 +73,7 @@ function App() {
 
   return (
     <div className="relative min-h-screen bg-black">
+      <ScrollToTop />
       {/* Background Canvas - Only render on desktop */}
       {/* {!isMobile && (
         <div className="fixed inset-0 z-0">
