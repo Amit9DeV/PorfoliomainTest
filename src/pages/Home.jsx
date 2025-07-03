@@ -210,7 +210,6 @@ const technologies = [
   { name: "Express", icon: SiExpress, color: "text-white" },
   { name: "Tailwind", icon: SiTailwindcss, color: "text-[#06B6D4]" },
   { name: "JavaScript", icon: SiJavascript, color: "text-[#F7DF1E]" },
-  { name: "TypeScript", icon: SiTypescript, color: "text-[#3178C6]" },
   { name: "Next.js", icon: SiNextdotjs, color: "text-white" },
 ];
 
@@ -237,10 +236,9 @@ const socialLinks = [
 
 // Stats for the skills section
 const stats = [
-  { label: "Projects Completed", value: "25+" },
-  { label: "Years Experience", value: "3+" },
-  { label: "Technologies", value: "12+" },
-  { label: "Satisfied Clients", value: "15+" },
+  { label: "Projects Completed", value: "15+" },
+  { label: "Years Experience", value: "1+" },
+  { label: "Technologies", value: "5+" },
 ];
 
 export default function Home() {

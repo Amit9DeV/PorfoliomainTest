@@ -476,7 +476,7 @@ export default function Contact() {
         </TerminalWindow>
 
         {/* Terminal Section */}
-        <TerminalWindow title="Terminal" className="mt-6">
+        <TerminalWindow title="Terminal" className="mt-6 hidden sm:block">
           <div className="space-y-2">
             <TerminalLine>
               <TypeWriter text="Welcome to the contact terminal!" />

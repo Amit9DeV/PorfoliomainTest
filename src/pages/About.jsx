@@ -64,33 +64,32 @@ const useAdvancedScrollAnimation = ({
 
 const skills = [
   { name: "React", level: 90 },
-  { name: "Node.js", level: 85 },
-  { name: "MongoDB", level: 80 },
-  { name: "Express", level: 85 },
+  { name: "Node.js", level: 75 },
+  { name: "MongoDB", level: 70 },
+  { name: "Express", level: 65 },
   { name: "JavaScript", level: 90 },
-  { name: "TypeScript", level: 75 },
   { name: "Tailwind CSS", level: 85 },
-  { name: "Three.js", level: 70 },
-];
+  { name: "Microsoft Word", level: 75 },
+  { name: "Microsoft Excel", level: 60 },
+  { name: "Tally", level: 40 },
+  { name: "Redux", level: 80 },
+  { name: "Git", level: 70 },
+  { name: "HTML & CSS", level: 90 },
+  { name: "Bootstrap", level: 75 },
 
+];
 const experiences = [
   {
-    year: "2023 - Present",
-    title: "Senior MERN Stack Developer",
-    company: "Tech Company Name",
-    description: "Leading development of full-stack web applications using MERN stack.",
+    year: "Sep 2024 - Nov 2024 · 3 months",
+    title: "Internship Trainee",
+    company: "CodeClause",
+    description: "Assisted in the development of full-stack web applications using the MERN stack.",
   },
   {
-    year: "2021 - 2023",
-    title: "Full Stack Developer",
-    company: "Previous Company Name",
-    description: "Developed and maintained multiple web applications using modern technologies.",
-  },
-  {
-    year: "2020 - 2021",
-    title: "Junior Developer",
-    company: "First Company Name",
-    description: "Started my journey in web development, focusing on front-end technologies.",
+    year: "Jul 2024 - Aug 2024 · 1 month",
+    title: "Internship Trainee",
+    company: "CodSoft",
+    description: "Worked on various projects as an intern, gaining hands-on experience in web development.",
   },
 ];
 

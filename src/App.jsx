@@ -73,21 +73,21 @@ function App() {
   return (
     <div className="relative min-h-screen bg-black">
       {/* Background Canvas - Only render on desktop */}
-      {!isMobile && (
+      {/* {!isMobile && (
         <div className="fixed inset-0 z-0">
           <Canvas>
             <ShaderPlane />
           </Canvas>
         </div>
-      )}
+      )} */}
 
       {/* Content Container */}
       <div className="relative z-10">
         <NavBar />
         
         <main className="pt-16">
-          <TransitionProvider>
-            <AnimatePresence mode="wait">
+          {/* <TransitionProvider>
+            <AnimatePresence mode="wait"> */}
               <Routes>
                 <Route
                   path="/"
@@ -130,8 +130,8 @@ function App() {
                   }
                 />
               </Routes>
-            </AnimatePresence>
-          </TransitionProvider>
+            {/* </AnimatePresence>
+          </TransitionProvider> */}
         </main>
 
         <Footer />
