@@ -1,6 +1,6 @@
 import { useMotionValue, useTransform } from "framer-motion";
 import { NavLink } from "react-router-dom";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import {
   SiReact,
   SiNodedotjs,
@@ -16,6 +16,31 @@ import {
 import { Download, Mail, Code, Rocket, Star, ArrowDown, ArrowRight, Terminal } from "iconoir-react";
 import smoothscroll from 'smoothscroll-polyfill';
 
+// Custom hook for mobile detection - optimized
+const useMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 768;
+  });
+
+  useEffect(() => {
+    let timeoutId;
+    const checkMobile = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(window.innerWidth <= 768);
+      }, 100); // Debounce resize events
+    };
+    
+    window.addEventListener('resize', checkMobile);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
+  return isMobile;
+};
 
 // Terminal header component
 const TerminalHeader = ({ title }) => (
@@ -50,87 +75,66 @@ const CommandButton = ({ children, onClick, icon: Icon }) => {
   );
 };
 
-// Particle effect component
+// Optimized Particle effect component
 const ParticleBackground = () => {
   const canvasRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [dimensions, setDimensions] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
-  });
+  const isMobile = useMobile();
+  const animationRef = useRef();
+  const particlesRef = useRef([]);
   
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Only run animation on desktop
+  // Reduce particle count and optimize performance
+  const particleCount = isMobile ? 15 : 30; // Reduced from original
+  
   useEffect(() => {
     if (isMobile) return;
     
-    let animationFrame;
+    // Initialize particles once
+    if (particlesRef.current.length === 0) {
+      particlesRef.current = Array.from({ length: particleCount }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        speedX: (Math.random() - 0.5) * 0.2, // Much slower
+        speedY: (Math.random() - 0.5) * 0.2,
+        opacity: Math.random() * 0.5 + 0.1,
+      }));
+    }
+    
     let lastTime = 0;
-    const fps = 20; // Further reduced FPS for mobile
+    const fps = 15; // Reduced FPS for better performance
     
     const animate = (currentTime) => {
       if (currentTime - lastTime > 1000 / fps) {
-        setParticles(prev => 
-          prev.map(particle => ({
-            ...particle,
-            x: (particle.x + particle.speedX + window.innerWidth) % window.innerWidth,
-            y: (particle.y + particle.speedY + window.innerHeight) % window.innerHeight,
-          }))
-        );
+        particlesRef.current.forEach(particle => {
+          particle.x = (particle.x + particle.speedX + window.innerWidth) % window.innerWidth;
+          particle.y = (particle.y + particle.speedY + window.innerHeight) % window.innerHeight;
+        });
         lastTime = currentTime;
       }
-      animationFrame = requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     };
 
-    animationFrame = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isMobile]);
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isMobile, particleCount]);
   
   if (isMobile) return null;
   
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 -z-10 opacity-10" // Further reduced opacity
+      className="absolute inset-0 -z-10 opacity-10"
       style={{ background: 'transparent' }}
     />
   );
 };
 
-// Tech icon component with hover effect
+// Tech icon component with hover effect - optimized
 const TechIcon = ({ icon: Icon, name, color }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const isMobile = useMobile();
   
   return (
     <div className="relative group">
@@ -154,39 +158,29 @@ const TechIcon = ({ icon: Icon, name, color }) => {
   );
 };
 
-// 3D Card effect component
+// 3D Card effect component - optimized
 const Card3D = ({ children, className }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useMobile();
   
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (isMobile) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const xPct = (mouseX / rect.width - 0.5) * 10; // Further reduced rotation range
-    const yPct = (mouseY / rect.height - 0.5) * 10;
+    const xPct = (mouseX / rect.width - 0.5) * 5; // Reduced rotation
+    const yPct = (mouseY / rect.height - 0.5) * 5;
     x.set(xPct);
     y.set(yPct);
-  };
+  }, [isMobile, x, y]);
   
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (isMobile) return;
     x.set(0);
     y.set(0);
-  };
+  }, [isMobile, x, y]);
   
   return (
     <div
@@ -203,6 +197,7 @@ const Card3D = ({ children, className }) => {
   );
 };
 
+// Memoized static data
 const technologies = [
   { name: "React", icon: SiReact, color: "text-[#61DAFB]" },
   { name: "Node.js", icon: SiNodedotjs, color: "text-[#339933]" },
@@ -234,7 +229,6 @@ const socialLinks = [
   },
 ];
 
-// Stats for the skills section
 const stats = [
   { label: "Projects Completed", value: "15+" },
   { label: "Years Experience", value: "1+" },
@@ -242,23 +236,39 @@ const stats = [
 ];
 
 export default function Home() {
+  // Optimized state management
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const heroRef = useRef(null);
+  const aboutRef = useRef(null);
 
   useEffect(() => {
     if (!('scrollBehavior' in document.documentElement.style)) {
       smoothscroll.polyfill();
     }
   }, []);
-  // Particle effect state
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeSection, setActiveSection] = useState("hero");
-  const heroRef = useRef(null);
-  const aboutRef = useRef(null);
   
+  const scrollToAbout = useCallback(() => {
+    aboutRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
-  
-  const scrollToAbout = () => {
-    aboutRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
+  // Throttled mouse position tracking
+  const handleMouseMove = useCallback((e) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  }, []);
+
+  useEffect(() => {
+    let timeoutId;
+    const throttledMouseMove = (e) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => handleMouseMove(e), 50);
+    };
+    
+    document.addEventListener('mousemove', throttledMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', throttledMouseMove);
+      clearTimeout(timeoutId);
+    };
+  }, [handleMouseMove]);
 
   return (
     <div className="relative overflow-hidden">
@@ -272,8 +282,8 @@ export default function Home() {
           />
           <ParticleBackground />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]" />
-            </div>
-          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative min-h-screen flex items-center py-20 lg:py-0">

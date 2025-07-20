@@ -2,9 +2,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 body{
   font-family: "Rajdhani", sans-serif;
+  font-optical-sizing: auto;
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+/* Reduce layout shifts */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -60,6 +89,7 @@ body{
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;

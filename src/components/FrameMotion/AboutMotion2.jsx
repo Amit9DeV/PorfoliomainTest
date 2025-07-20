@@ -33,7 +33,6 @@ export default function UseTime() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        gap: 50,
                         flexWrap: "wrap",
                         width: 500,
                         gap: 80,
