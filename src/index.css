@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body{
-  font-family: "Rajdhani", sans-serif;
+body {
+  font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
   font-feature-settings: "kern" 1;
   text-rendering: optimizeLegibility;
@@ -25,12 +25,48 @@ img {
 
 /* Optimize animations */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 1023px) {
+  * {
+    /* Add tap highlight for better mobile UX */
+    -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+  }
+
+  /* Disable smooth scroll on mobile for better performance */
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* Simplify animations on mobile */
+  *[class*="animate-"],
+  *[class*="transition-"] {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* Desktop-only hover effects */
+@media (hover: hover) and (pointer: fine) {
+  .hover-desktop-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  .hover-desktop-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .hover-desktop-glow:hover {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   }
 }
 
@@ -62,6 +98,7 @@ img {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -94,7 +131,25 @@ img {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Utility classes */
+@layer utilities {
+
+  /* Touch-friendly minimum sizes */
+  .min-touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Prevent text selection on interactive elements (mobile) */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
   }
 }

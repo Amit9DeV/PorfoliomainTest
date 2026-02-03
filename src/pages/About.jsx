@@ -1,216 +1,208 @@
-import React, { useEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { LuArrowBigDownDash } from "react-icons/lu";
+import React from "react";
+import { motion } from "framer-motion";
 import { TfiEmail } from "react-icons/tfi";
-import { FaLinkedin } from "react-icons/fa";
-import { FaGithubSquare } from "react-icons/fa";
-import { FaPhoneVolume } from "react-icons/fa6";
-import AboutMotion from "../components/FrameMotion/AboutMotion";
-import AboutMotion2 from "../components/FrameMotion/AboutMotion2";
-import { FaReact } from "react-icons/fa";
+import { FaLinkedin, FaGithubSquare, FaReact } from "react-icons/fa";
+import { FaPhoneVolume, FaCode } from "react-icons/fa6";
 import { TbBrandRedux } from "react-icons/tb";
-import { SiJavascript } from "react-icons/si";
+import { SiJavascript, SiExpress, SiMongodb } from "react-icons/si";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { LiaNode } from "react-icons/lia";
-import { SiExpress } from "react-icons/si";
-import { SiMongodb } from "react-icons/si";
-import { Terminal, ArrowRight, Code, Download, ArrowDown } from "iconoir-react";
 
-// Terminal header component
-const TerminalHeader = ({ title }) => (
-  <div className="rounded-t-lg bg-blue-900/30 border border-blue-500/20 overflow-hidden">
-    <div className="px-4 py-2 flex items-center">
-      <div className="flex space-x-2 mr-4">
-        <div className="w-3 h-3 rounded-full bg-red-500" />
-        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-        <div className="w-3 h-3 rounded-full bg-green-500" />
-      </div>
-      <div className="text-white font-mono text-sm flex-1 text-center">{title}</div>
-      <div className="text-gray-400 font-mono text-xs">visitor@amit-portfolio</div>
-    </div>
-  </div>
-);
-
-// Custom Hook for Advanced Scroll Animation
-const useAdvancedScrollAnimation = ({
-  triggerSelector,
-  animationConfig,
-  scrollTriggerConfig,
-}) => {
-  useEffect(() => {
-    const elements = document.querySelectorAll(triggerSelector);
-
-    elements.forEach((element) => {
-      gsap.fromTo(element, animationConfig.from, {
-        ...animationConfig.to,
-        scrollTrigger: {
-          trigger: element,
-          start: scrollTriggerConfig.start || "top 90%",
-          end: scrollTriggerConfig.end || "bottom 0%",
-          scrub: scrollTriggerConfig.scrub || true,
-          markers: scrollTriggerConfig.markers || false,
-          pin: scrollTriggerConfig.pin || false,
-          anticipatePin: scrollTriggerConfig.anticipatePin || 1,
-        },
-      });
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, [triggerSelector, animationConfig, scrollTriggerConfig]);
-};
 
 const skills = [
-  { name: "React", level: 90 },
-  { name: "Node.js", level: 75 },
-  { name: "MongoDB", level: 70 },
-  { name: "Express", level: 65 },
-  { name: "JavaScript", level: 90 },
-  { name: "Tailwind CSS", level: 85 },
-  { name: "Microsoft Word", level: 75 },
-  { name: "Microsoft Excel", level: 60 },
-  { name: "Tally", level: 40 },
-  { name: "Redux", level: 80 },
-  { name: "Git", level: 70 },
-  { name: "HTML & CSS", level: 90 },
-  { name: "Bootstrap", level: 75 },
-
+  { name: "React", level: 90, icon: FaReact, color: "text-blue-400" },
+  { name: "Node.js", level: 75, icon: LiaNode, color: "text-green-500" },
+  { name: "MongoDB", level: 70, icon: SiMongodb, color: "text-green-600" },
+  { name: "Express", level: 65, icon: SiExpress, color: "text-gray-400" },
+  { name: "JavaScript", level: 90, icon: SiJavascript, color: "text-yellow-400" },
+  { name: "Tailwind CSS", level: 85, icon: RiTailwindCssFill, color: "text-cyan-400" },
+  { name: "Redux", level: 80, icon: TbBrandRedux, color: "text-purple-500" },
+  { name: "HTML & CSS", level: 90, icon: FaCode, color: "text-orange-500" },
 ];
+
 const experiences = [
   {
-    year: "Sep 2024 - Nov 2024 · 3 months",
+    year: "Sep 2024 - Nov 2024",
+    duration: "3 months",
     title: "Internship Trainee",
     company: "CodeClause",
-    description: "Assisted in the development of full-stack web applications using the MERN stack.",
+    description: "Assisted in the development of full-stack web applications using the MERN stack. Collaborated with senior developers to implement new features and fix bugs.",
   },
   {
-    year: "Jul 2024 - Aug 2024 · 1 month",
+    year: "Jul 2024 - Aug 2024",
+    duration: "1 month",
     title: "Internship Trainee",
     company: "CodSoft",
-    description: "Worked on various projects as an intern, gaining hands-on experience in web development.",
+    description: "Worked on various projects as an intern, gaining hands-on experience in web development, version control, and agile methodologies.",
   },
 ];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
 export default function About() {
   return (
-    <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-16">
+    <div className="relative min-h-screen pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+
+
+      <div className="max-w-6xl mx-auto space-y-12 md:space-y-24">
         {/* About Me Section */}
-        <section className="space-y-8">
-          <div className="mb-6">
-            <TerminalHeader title="~/personal-info.md" />
-            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
-              $ cat personal-info.md | more
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-6"
+          >
+            <h2 className="text-4xl font-bold text-white">
+              About <span className="text-blue-500">Me</span>
+            </h2>
+            <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
+              <p>
+                I am a passionate MERN Stack Developer with a deep love for creating elegant, efficient, and user-centric web applications.
+              </p>
+              <p>
+                My journey in web development began with a curiosity about the mechanics of the internet, which quickly evolved into a dedicated career. I specialize in building full-stack applications using MongoDB, Express.js, React, and Node.js, always striving for clean code and exceptional user experiences.
+              </p>
+              <p>
+                When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or solving complex algorithmic problems—one function at a time.
+              </p>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold font-mono text-white border-l-2 border-blue-500 pl-3">
-                <span className="text-blue-400">function</span> <span className="text-green-400">aboutMe</span><span className="text-yellow-500">()</span> {"{"}
-              </h2>
-              <div className="pl-6 space-y-4 border-l border-dashed border-blue-500/30">
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  I'm a passionate MERN stack developer with 3+ years of experience in building
-                  modern web applications. My journey in web development started with a
-                  curiosity about how things work on the internet, and it has evolved into a
-                  full-fledged career in creating beautiful and functional web experiences.
-                </p>
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  I specialize in building full-stack applications using MongoDB, Express.js,
-                  React, and Node.js. I'm also experienced in modern front-end technologies
-                  and best practices, always striving to create responsive and user-friendly
-                  interfaces.
-                </p>
-              </div>
-              <div className="text-white font-mono">{"}"}</div>
+
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors border border-white/10">
+                <FaGithubSquare className="text-xl" /> GitHub
+              </a>
+              <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors border border-white/10">
+                <FaLinkedin className="text-xl" /> LinkedIn
+              </a>
+              <a href="#" className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors border border-white/10">
+                <TfiEmail className="text-xl" /> Email
+              </a>
             </div>
-            <div className="relative">
-              <TerminalHeader title="~/workspace.jpg" />
-              <div className="aspect-w-16 aspect-h-9 rounded-b-lg overflow-hidden border border-blue-500/20 border-t-0">
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative group"
+          >
+            <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full" />
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl transform transition-transform duration-500 group-hover:scale-[1.02]">
+              <div className="aspect-[4/3] bg-gray-900/50 backdrop-blur-sm">
                 <img
                   src="/avtar.jpg"
                   alt="My Workspace"
-                  className="object-cover"
+                  className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity"
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/70 backdrop-blur-sm font-mono text-xs text-green-400">
-                  $ image --view workspace.jpg --resolution 1920x1080
-                </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         {/* Skills Section */}
-        <section className="space-y-8">
-          <div className="mb-6">
-            <TerminalHeader title="~/skills.json" />
-            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
-              $ skills --list --sort level:desc | render
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="space-y-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-3xl font-bold text-white mb-4">Technical <span className="text-blue-500">Skills</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              A curated list of technologies I use to build scalable and performant applications.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
             {skills.map((skill) => (
-              <div
+              <motion.div
                 key={skill.name}
-                className="bg-black/30 backdrop-blur-xl rounded-lg p-4 space-y-2 border border-blue-500/20"
+                variants={itemVariants}
+                className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-all hover:-translate-y-1 group"
               >
-                <div className="flex justify-between items-center">
-                  <span className="text-white font-medium font-mono">{skill.name}</span>
-                  <span className="text-blue-400 font-mono text-sm">{skill.level}%</span>
+                <div className="flex items-center gap-4 mb-4">
+                  <skill.icon className={`text-3xl ${skill.color}`} />
+                  <h3 className="font-semibold text-white">{skill.name}</h3>
                 </div>
-                <div className="h-2 bg-blue-900/20 rounded-full overflow-hidden border border-blue-500/10">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-blue-700"
-                    style={{ width: `${skill.level}%` }}
+                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: `${skill.level}%` }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="h-full bg-blue-500 rounded-full"
                   />
                 </div>
-                <div className="text-xs text-gray-400 font-mono">
-                  [<span className="text-yellow-500">{skill.level >= 80 ? 'Expert' : skill.level >= 70 ? 'Advanced' : 'Intermediate'}</span>]
+                <div className="flex justify-between mt-2 text-xs text-gray-400">
+                  <span>Proficiency</span>
+                  <span>{skill.level}%</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* Experience Timeline */}
-        <section className="space-y-8">
-          <div className="mb-6">
-            <TerminalHeader title="~/experience.log" />
-            <div className="font-mono text-xs text-blue-400 mb-4 mt-3 bg-black/30 p-2 rounded-b-lg border border-blue-500/20 border-t-0">
-              $ cat experience.log | tail -n 10 | less
-            </div>
-          </div>
-          
-          <div className="space-y-8">
-            {experiences.map((exp) => (
-              <div
-                key={exp.year}
-                className="relative pl-8 pb-8 border-l-2 border-blue-500/30 last:pb-0"
-              >
-                <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-blue-500" />
-                <div className="space-y-2">
-                  <span className="text-sm text-blue-400 font-mono">[{exp.year}]</span>
-                  <h3 className="text-xl font-semibold text-white font-mono">{exp.title}</h3>
-                  <p className="text-gray-400 font-mono text-sm">@{exp.company}</p>
-                  <p className="text-gray-300 border-l-2 border-blue-500/20 pl-3">{exp.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="flex justify-center pt-8">
-            <div className="font-mono text-xs flex items-center gap-2">
-              <span className="text-green-400">visitor@portfolio:</span>
-              <span className="text-blue-400">~/about$</span>
-              <span className="text-gray-300">echo "Thanks for visiting!"</span>
-              <div className="w-2 h-4 bg-blue-500 ml-1 animate-pulse" />
+        <section className="space-y-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-3xl font-bold text-white mb-4">Work <span className="text-blue-500">Experience</span></h2>
+          </motion.div>
+
+          <div className="relative max-w-3xl mx-auto">
+            <div className="absolute left-0 pl-8 top-0 bottom-0 w-px bg-gradient-to-b from-blue-500 to-transparent" />
+
+            <div className="space-y-12">
+              {experiences.map((exp, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  className="relative pl-16 group"
+                >
+                  <div className="absolute left-[27px] top-2 w-3 h-3 bg-blue-500 rounded-full ring-4 ring-black/50 group-hover:ring-blue-500/30 transition-shadow" />
+
+                  <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-colors">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                      <h3 className="text-xl font-bold text-white">{exp.title}</h3>
+                      <span className="text-sm font-medium text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full w-fit">
+                        {exp.year}
+                      </span>
+                    </div>
+                    <div className="text-lg text-gray-300 font-medium mb-2">@{exp.company}</div>
+                    <p className="text-gray-400 text-sm leading-relaxed">{exp.description}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
+
       </div>
     </div>
   );
